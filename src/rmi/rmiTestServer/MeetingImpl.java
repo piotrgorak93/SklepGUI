@@ -16,7 +16,7 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     private static final long serialVersionUID = 1L;
     private Database database;
 
-    protected MeetingImpl() throws RemoteException {
+    public MeetingImpl() throws RemoteException {
         database = new Database();
     }
 

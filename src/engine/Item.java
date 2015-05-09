@@ -5,7 +5,9 @@ import java.util.Comparator;
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
  */
-public class Item {
+public class Item implements java.io.Serializable {
+    private static final long serialVersionUID = -1360412267536229201L;
+
     private final String category;
     private final String name;
     private final String description;
@@ -57,4 +59,9 @@ public class Item {
         String item2Name = item2.getName().toUpperCase();
         return item2Name.compareTo(item1Name);
     };
+
+    @Override
+    public String toString() {
+        return getName() + " kategoria: " + getCategory() + ", opis: " + getDescription() + ", cena: " + getPrice() + ", ilosc sztuk: " + getQuantity();
+    }
 }

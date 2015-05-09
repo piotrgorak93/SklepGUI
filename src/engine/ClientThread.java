@@ -1,6 +1,5 @@
 package engine;
 
-import gui.Main;
 import rmi.rmiTestClient.MeetingClient;
 
 /**
@@ -9,7 +8,7 @@ import rmi.rmiTestClient.MeetingClient;
 public class ClientThread implements Runnable {
     @Override
     public void run() {
-        new Main();
+//        new Main();
         new MeetingClient();
     }
 }

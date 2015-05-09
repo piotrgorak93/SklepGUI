@@ -1,16 +1,14 @@
 package rmi.rmiTestClient;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import engine.Item;
+import rmi.rmiTestMeeting.Constatns;
+import rmi.rmiTestMeeting.IMeeting;
+
 import java.rmi.RMISecurityManager;
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
-
-import engine.Item;
-import rmi.rmiTestMeeting.Constatns;
-import rmi.rmiTestMeeting.IMeeting;
 
 public class MeetingClient {
     public MeetingClient() {

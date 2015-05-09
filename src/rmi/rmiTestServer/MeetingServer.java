@@ -1,10 +1,10 @@
 package rmi.rmiTestServer;
 
+import rmi.rmiTestMeeting.Constatns;
+
 import java.rmi.RMISecurityManager;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
-import rmi.rmiTestMeeting.Constatns;
 
 
 public class MeetingServer {
