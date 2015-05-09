@@ -1,6 +1,5 @@
 package engine;
 
-import gui.ClientGUI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +14,6 @@ public class ClientController {
 
     public ClientController(Stage stage) {
         stage.close();
-
         Parent root = null;
 
         try {
@@ -23,10 +21,9 @@ public class ClientController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         Stage stage2 = new Stage();
         stage2.setTitle("System sklepowy");
-        stage2.setScene(new Scene(root, 450, 450));
+        stage2.setScene(new Scene(root, stage2.getWidth(), stage2.getHeight()));
         stage2.show();
     }
 }

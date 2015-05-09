@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="569.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientGUI">
@@ -16,12 +16,15 @@
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="387.0" prefWidth="221.0">
                                             <children>
-                                                <ListView editable="true" prefHeight="512.0" prefWidth="203.0" fx:id="itemList" />
+                                                <ListView fx:id="itemList" editable="true" prefHeight="512.0" prefWidth="203.0" />
                                             </children>
                                         </AnchorPane>
                                     </content>
                                 </ScrollPane>
-                                <ImageView fitHeight="234.0" fitWidth="326.0" layoutX="241.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                                <ImageView fitHeight="234.0" fitWidth="326.0" layoutX="241.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../Desktop/portfolio.png" />
+                           </image></ImageView>
                                 <TextArea editable="false" layoutX="241.0" layoutY="305.0" prefHeight="200.0" prefWidth="355.0" />
                             </children>
                         </AnchorPane>
