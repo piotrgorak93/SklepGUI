@@ -8,9 +8,15 @@ import rmi.rmiTestMeeting.Constatns;
 
 
 public class MeetingServer {
+    public MeetingServer() {
+        try {
+            main();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-
-    public static void main(String[] args) throws Exception {
+    public void main() throws Exception {
         System.setSecurityManager(new RMISecurityManager());
 
         MeetingImpl impl = new MeetingImpl();

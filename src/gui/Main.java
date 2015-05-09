@@ -1,5 +1,7 @@
 package gui;
 
+import engine.AdminController;
+import engine.ClientController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -98,6 +100,10 @@ public class Main extends Application {
             if (czyJestUzytkownik(checkUser, checkPw)) {
                 lblMessage.setText("Congratulations!");
                 lblMessage.setTextFill(Color.GREEN);
+                if (checkUser.equals("admin")) {
+                    new AdminController();
+                } else
+                    new ClientController();
             } else {
                 lblMessage.setText("Incorrect user or pw.");
                 lblMessage.setTextFill(Color.RED);
