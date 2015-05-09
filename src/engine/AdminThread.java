@@ -1,11 +1,11 @@
 package engine;
 
+import gui.AdminGUI;
+
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
  */
-public class AdminThread implements Runnable {
-    @Override
-    public void run() {
-        System.out.println("ADMIN");
-    }
+public class AdminThread {
+
+
 }
