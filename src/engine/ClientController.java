@@ -3,6 +3,8 @@ package engine;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,8 +24,12 @@ public class ClientController {
             e.printStackTrace();
         }
         Stage stage2 = new Stage();
-        stage2.setTitle("System sklepowy");
+        Image image = new Image(getClass().getResourceAsStream("1.png"));
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+
         stage2.setScene(new Scene(root, stage2.getWidth(), stage2.getHeight()));
+
         stage2.show();
     }
 }

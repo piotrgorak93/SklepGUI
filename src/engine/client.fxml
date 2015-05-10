@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane prefHeight="569.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientGUI">
     <children>
         <TabPane prefHeight="569.0" prefWidth="818.0" tabClosingPolicy="UNAVAILABLE">
@@ -12,7 +12,7 @@
                     <content>
                         <AnchorPane prefHeight="425.0" prefWidth="600.0">
                             <children>
-                                <ScrollPane hbarPolicy="NEVER" layoutX="14.0" layoutY="15.0" pannable="true" prefHeight="268.0" prefWidth="218.0">
+                                <ScrollPane hbarPolicy="AS_NEEDED" layoutX="14.0" layoutY="15.0" pannable="true" prefHeight="268.0" prefWidth="218.0">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="387.0" prefWidth="221.0">
                                             <children>
@@ -21,11 +21,17 @@
                                         </AnchorPane>
                                     </content>
                                 </ScrollPane>
-                                <ImageView fitHeight="234.0" fitWidth="326.0" layoutX="241.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../Desktop/portfolio.png" />
-                           </image></ImageView>
-                                <TextArea editable="false" layoutX="241.0" layoutY="305.0" prefHeight="200.0" prefWidth="355.0" />
+                                <TableView id="table" fx:id="productTable" layoutX="241.0" layoutY="15.0" prefHeight="268.0" prefWidth="447.0" tableMenuButtonVisible="true">
+                                    <columns>
+                                        <TableColumn fx:id="productID" prefWidth="75.0" text="ID" />
+                                        <TableColumn fx:id="productName" prefWidth="75.0" text="Nazwa" />
+                                        <TableColumn fx:id="productCategory" prefWidth="75.0" text="Kategoria" />
+                                        <TableColumn fx:id="productDescription" prefWidth="75.0" text="Opis" />
+                                        <TableColumn fx:id="productPrice" prefWidth="75.0" text="Cena" />
+                                        <TableColumn fx:id="productQuantity" prefWidth="75.0" text="Ilość" />
+                                    </columns>
+                                </TableView>
+                        <Button layoutX="241.0" layoutY="301.0" mnemonicParsing="false" text="Kup przedmiot" />
                             </children>
                         </AnchorPane>
                     </content>

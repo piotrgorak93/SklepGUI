@@ -1,11 +1,8 @@
 package engine;
 
+import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Comparator;
 
 /**
@@ -20,16 +17,31 @@ public class Item implements java.io.Serializable {
     private final double price;
     private final int quantity;
     private final int id;
-    private static int staticId = 0;
     private Image img;
+    public final StringProperty nameProperty;
+    public final StringProperty categoryProperty;
+    public final StringProperty descriptionProperty;
+    public final DoubleProperty priceProperty;
+    public final IntegerProperty quantityProperty;
+    public final IntegerProperty idProperty;
 
-    public Item(String name, String category, String description, double price, int quantity) {
+
+    public Item(String name, String category, String description, double price, int quantity, int id) {
+        this.nameProperty = new SimpleStringProperty(name);
+        this.categoryProperty = new SimpleStringProperty(category);
+        this.descriptionProperty = new SimpleStringProperty(description);
+        this.priceProperty = new SimpleDoubleProperty(price);
+        this.quantityProperty = new SimpleIntegerProperty(quantity);
+
+
         this.name = name;
         this.category = category;
         this.description = description;
         this.price = price;
         this.quantity = quantity;
-        this.id = ++staticId;
+        this.id = id;
+        this.idProperty = new SimpleIntegerProperty(this.id);
+
         String plik = "../img/" + this.id + 1 + ".png";
 
 //        this.img = new Image(Item.class.getResourceAsStream("1.png"));
