@@ -5,6 +5,7 @@ import gui.events.BuyEvent;
 import gui.events.NothingFound;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -36,7 +37,7 @@ public class ClientGUI {
     public TableColumn<LocalItem, String> foundProductDescription;
     public TableColumn<LocalItem, Number> foundProductPrice;
     public TableColumn<LocalItem, Number> foundProductQuantity;
-    public TextField searchDescripionBox;
+    public TextField searchDescriptionBox;
     public TextField searchCategoryBox;
     public TextField searchBox;
     public Button addToBucketButton;
@@ -178,7 +179,7 @@ public class ClientGUI {
     @FXML
     public void searchHandler(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            searchDescripionBox.setText("");
+            searchDescriptionBox.setText("");
             searchCategoryBox.setText("");
             searchName(searchBox.getText());
         }
@@ -187,7 +188,7 @@ public class ClientGUI {
     @FXML
     public void searchByCategoryHandler(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            searchDescripionBox.setText("");
+            searchDescriptionBox.setText("");
             searchBox.setText("");
             searchCategory(searchCategoryBox.getText());
         }
@@ -199,7 +200,7 @@ public class ClientGUI {
         if (event.getCode() == KeyCode.ENTER) {
             searchBox.setText("");
             searchCategoryBox.setText("");
-            searchDescription(searchDescripionBox.getText());
+            searchDescription(searchDescriptionBox.getText());
         }
     }
 
@@ -273,4 +274,25 @@ public class ClientGUI {
         bucketProductTable.setItems(itemsInBucketTable);
     }
 
+    public void removeFromBucket() {
+        ObservableList<LocalItem> selected = bucketProductTable.getSelectionModel().getSelectedItems();
+        if (itemsInBucketTable.size() == 1) {
+            itemsInBucketTable.clear();
+            bucketProductTable.setItems(null);
+            bucketPane.setDisable(true);
+        } else {
+            itemsInBucketTable.remove(bucketProductTable.getSelectionModel().getSelectedItem());
+            productTable.setItems(itemsInBucketTable);
+        }
+        for (Item item : myBucket) {
+            if (item.getId() == selected.get(0).id) {
+                System.out.println("usuwam " + item);
+                myBucket.remove(item);
+            }
+        }
+    }
+
+    public void buyItemsFromBucket(Event event) {
+
+    }
 }
