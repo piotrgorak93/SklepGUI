@@ -64,31 +64,33 @@ public class Database {
         return itemsToReturn;
     }
 
-    public ArrayList<Item> getItemByDescription(String description) {
-        itemsToReturn.clear();
-        System.out.println("Lista: " + itemsToReturn);
-        for (Item item : itemArrayList) {
-            if (item.getDescription().toLowerCase().contains(description)) {
-                itemsToReturn.add(item);
-            }
-
-        }
-        System.out.println("Zwracam: " + itemsToReturn);
-        return itemsToReturn;
-    }
 
     public ArrayList<Item> getItemByCategory(String category) {
 
         itemsToReturn.clear();
         System.out.println("Lista: " + itemsToReturn);
+        if (!category.equalsIgnoreCase(""))
+            for (Item item : itemArrayList) {
+                if (item.getCategory().equalsIgnoreCase(category)) {
 
-        for (Item item : itemArrayList) {
-            if (item.getCategory().equalsIgnoreCase(category)) {
+                    itemsToReturn.add(itemsToReturn.size(), item);
 
-                itemsToReturn.add(itemsToReturn.size(), item);
+                }
+            }
+        System.out.println("Zwracam: " + itemsToReturn);
+        return itemsToReturn;
+    }
+
+    public ArrayList<Item> getItemByDescription(String description) {
+        itemsToReturn.clear();
+        System.out.println("Lista: " + itemsToReturn);
+        if (!description.equalsIgnoreCase(""))
+            for (Item item : itemArrayList) {
+                if (item.getDescription().toLowerCase().contains(description)) {
+                    itemsToReturn.add(item);
+                }
 
             }
-        }
         System.out.println("Zwracam: " + itemsToReturn);
         return itemsToReturn;
     }

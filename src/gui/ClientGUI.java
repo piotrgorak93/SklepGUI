@@ -40,6 +40,8 @@ public class ClientGUI {
     public TextField searchCategoryBox;
     public TextField searchBox;
     public Button addToBucketButton;
+    public Button searchAddToBucketButton;
+    public Tab bucketPane;
 
 
     ArrayList<Item> myBucket = new ArrayList<>();
@@ -111,7 +113,20 @@ public class ClientGUI {
             //            meeting.buyItem(selectedItem);
             System.out.println(itemsOnList);
             removeFromStock(localItem);
+            bucketPane.setDisable(false);
         }
+    }
+
+    public void searchAddItemToBucket() {
+        LocalItem local = productTable.getSelectionModel().getSelectedItem();
+        Item itemToAdd = new Item(local.name, local.category, local.description, local.price, local.quantity, local.id);
+        if (!local.name.equalsIgnoreCase("")) {
+            myBucket.add(itemToAdd);
+            System.out.println(itemsOnList);
+            removeFromStock(itemToAdd);
+            bucketPane.setDisable(false);
+        }
+
     }
 
     public void removeFromStock(Item item) {
@@ -140,6 +155,8 @@ public class ClientGUI {
     @FXML
     public void searchHandler(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
+            searchDescripionBox.setText("");
+            searchCategoryBox.setText("");
             searchName(searchBox.getText());
         }
     }
@@ -147,6 +164,8 @@ public class ClientGUI {
     @FXML
     public void searchByCategoryHandler(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
+            searchDescripionBox.setText("");
+            searchBox.setText("");
             searchCategory(searchCategoryBox.getText());
         }
     }
@@ -155,6 +174,8 @@ public class ClientGUI {
     @FXML
     public void searchByDescriptionHandler(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
+            searchBox.setText("");
+            searchCategoryBox.setText("");
             searchDescription(searchDescripionBox.getText());
         }
     }
@@ -167,7 +188,7 @@ public class ClientGUI {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        if (foundList != null)
+        if (foundList.size() != 0)
             printSearchResults(foundList);
         else new NothingFound();
     }
@@ -180,7 +201,7 @@ public class ClientGUI {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        if (foundList != null)
+        if (foundList.size() != 0)
             printSearchResults(foundList);
         else new NothingFound();
     }
@@ -193,7 +214,7 @@ public class ClientGUI {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        if (foundList != null)
+        if (foundList.size() != 0)
             printSearchResults(foundList);
         else new NothingFound();
     }
