@@ -4,12 +4,12 @@ import engine.Item;
 import gui.events.NothingFound;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
+import javafx.util.converter.NumberStringConverter;
 import rmi.rmiTestClient.MeetingClient;
 import rmi.rmiTestMeeting.IMeeting;
 
@@ -85,6 +85,7 @@ public class AdminGUI {
     }
 
     private void printDatabaseEdit() {
+
         ArrayList<Item> downloadedFromServer = null;
         ObservableList<LocalItem> itemsToPrint = FXCollections.observableArrayList();
         System.out.println("FUNKCJA: " + itemsToPrint);
@@ -101,6 +102,37 @@ public class AdminGUI {
             }
 
             System.out.println("DRUKUJE LISTE: " + itemsToPrint);
+            dbProductName.setCellFactory(TextFieldTableCell.forTableColumn());
+            dbProductName.setOnEditCommit(
+                    event -> event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNewName(event.getNewValue())
+            );
+            dbProductID.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+            dbProductID.setOnEditCommit(
+                    event -> event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNewID(event.getNewValue())
+            );
+            dbProductCategory.setCellFactory(TextFieldTableCell.forTableColumn());
+            dbProductCategory.setOnEditCommit(
+                    event -> event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNewCategory(event.getNewValue())
+            );
+            dbProductDescription.setCellFactory(TextFieldTableCell.forTableColumn());
+            dbProductDescription.setOnEditCommit(
+                    event -> event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNewDescription(event.getNewValue())
+            );
+            dbProductQuantity.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+            dbProductQuantity.setOnEditCommit(
+                    event -> event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNewQuantity(event.getNewValue())
+            );
+            dbProductPrice.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+            dbProductPrice.setOnEditCommit(
+                    event -> event.getTableView().getItems().get(
+                            event.getTablePosition().getRow()).setNewPrice(event.getNewValue())
+            );
+
             dbProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
             dbProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
             dbProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
@@ -110,7 +142,9 @@ public class AdminGUI {
             dbProductTable.setItems(itemsToPrint);
             dbProductTable.getItems().forEach(System.out::println);
         }
+
     }
+
 
     public void createList() {
 
