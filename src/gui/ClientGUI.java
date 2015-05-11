@@ -43,6 +43,14 @@ public class ClientGUI {
     public Button searchAddToBucketButton;
     public Tab bucketPane;
 
+    public TableView<LocalItem> bucketProductTable;
+    public TableColumn<LocalItem, Number> bucketProductID;
+    public TableColumn<LocalItem, String> bucketProductName;
+    public TableColumn<LocalItem, String> bucketProductCategory;
+    public TableColumn<LocalItem, String> bucketProductDescription;
+    public TableColumn<LocalItem, Number> bucketProductPrice;
+    public TableColumn<LocalItem, Number> bucketProductQuantity;
+
 
     ArrayList<Item> myBucket = new ArrayList<>();
 
@@ -51,6 +59,7 @@ public class ClientGUI {
     ObservableList<Item> itemsOnList = null;
     ObservableList<LocalItem> itemsInTable = null;
     ObservableList<LocalItem> itemsInResultTable = null;
+    ObservableList<LocalItem> itemsInBucketTable = null;
 
     @FXML
     private void initialize() {
@@ -71,15 +80,15 @@ public class ClientGUI {
     }
 
     public void createList() {
-        ObservableList<Item> asd = null;
+
         System.out.println(meeting);
         try {
-            asd = FXCollections.observableArrayList(
+            itemsOnList = FXCollections.observableArrayList(
                     meeting.getAllItems());
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        itemList.setItems(asd);
+        itemList.setItems(itemsOnList);
     }
 
     public void printResult() {
@@ -110,37 +119,51 @@ public class ClientGUI {
         Item localItem = selectedItem;
         if (localItem != null) {
             myBucket.add(localItem);
-            //            meeting.buyItem(selectedItem);
-            System.out.println(itemsOnList);
+            System.out.println("LISTA:" + itemsOnList);
             removeFromStock(localItem);
             bucketPane.setDisable(false);
+            printBucket();
+            System.out.println("DO USUNIECIA " + localItem);
+
         }
     }
 
     public void searchAddItemToBucket() {
-        LocalItem local = productTable.getSelectionModel().getSelectedItem();
-        Item itemToAdd = new Item(local.name, local.category, local.description, local.price, local.quantity, local.id);
-        if (!local.name.equalsIgnoreCase("")) {
+        ObservableList<LocalItem> localList = foundProductTable.getSelectionModel().getSelectedItems();
+        System.out.println("WYPISUJE LOCAL " + localList);
+        LocalItem localItem = localList.get(0);
+        Item itemToAdd = new Item(localItem.name, localItem.category, localItem.description, localItem.price, localItem.quantity, localItem.id);
+        System.out.println("DRuk nowy item " + itemToAdd);
+        if (!localItem.name.equalsIgnoreCase("")) {
             myBucket.add(itemToAdd);
             System.out.println(itemsOnList);
             removeFromStock(itemToAdd);
             bucketPane.setDisable(false);
+            printBucket();
         }
 
     }
 
     public void removeFromStock(Item item) {
-        itemsInTable.remove(item);
+        System.out.println(item);
+        LocalItem local = new LocalItem(item.getName(), item.getCategory(), item.getDescription(), item.getPrice(), item.getQuantity(), item.getId());
         int quantity = item.getQuantity();
+        System.out.println(quantity);
         if (quantity == 1) {
+            itemList.getItems().remove(item);
             itemsOnList.remove(item);
-
+            cleanTable();
         } else
             item.setQuantity(--quantity);
 
-
+        try {
+            meeting.removeItem(item);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         new BuyEvent(item);
         updateList(item);
+
     }
 
     private void updateList(Item item) {
@@ -233,6 +256,21 @@ public class ClientGUI {
         foundProductPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty);
         foundProductQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty);
         foundProductTable.setItems(itemsInResultTable);
+    }
+
+    private void printBucket() {
+        itemsInBucketTable = FXCollections.observableArrayList();
+        for (Item item : myBucket) {
+            itemsInBucketTable.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(), item.getPrice(),
+                    1, item.getId()));
+        }
+        bucketProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
+        bucketProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
+        bucketProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
+        bucketProductDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty);
+        bucketProductPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty);
+        bucketProductQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty);
+        bucketProductTable.setItems(itemsInBucketTable);
     }
 
 }

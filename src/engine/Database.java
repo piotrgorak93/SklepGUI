@@ -43,15 +43,13 @@ public class Database {
 
     public void removeItemFromDatabase(Item item) {
         int quantity = item.getQuantity();
-        if (quantity == 1)
-            itemArrayList.remove(getItemIndexByItem(item));
-        else
+        if (quantity == 1) {
+            itemArrayList.remove(item);
+            System.out.println("USUWAM Z BAZY");
+            System.out.println("LISTA PRZEDMIOTOW " + itemArrayList);
+        } else
             item.setQuantity(--quantity);
 
-    }
-
-    public int getItemIndexByItem(Item item) {
-        return itemArrayList.indexOf(item);
     }
 
     public ArrayList<Item> getItemByName(String name) {
