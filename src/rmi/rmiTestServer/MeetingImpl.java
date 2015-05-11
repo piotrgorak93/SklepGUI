@@ -30,7 +30,7 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     @Override
     public void buyItem(Item item) throws RemoteException {
         database.removeItemFromDatabase(item);
-        new BuyEvent();
+        new BuyEvent(item);
     }
 
     @Override

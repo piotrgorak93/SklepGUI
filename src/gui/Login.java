@@ -32,7 +32,6 @@ public class Login {
     public Login(Stage primaryStage) {
         listaUzytkownikow.add(new User("admin", "admin"));
         listaUzytkownikow.add(new User("user", "user"));
-        listaUzytkownikow.add(new User("magazynier", "user"));
         primaryStage.setTitle("Witaj w sklepie");
 
         BorderPane bp = new BorderPane();
@@ -114,11 +113,11 @@ public class Login {
                 lblMessage.setText("Congratulations!");
                 lblMessage.setTextFill(Color.GREEN);
                 if (checkUser.equals("admin")) {
-                    new AdminController(primaryStage);
+                    new AdminController(primaryStage,findUserByName("admin"));
                 } else
                     new ClientController(primaryStage);
             } else {
-                lblMessage.setText("Incorrect user or pw.");
+                lblMessage.setText("Bledne dane logowania");
                 lblMessage.setTextFill(Color.RED);
             }
             txtUserName.setText("");
@@ -126,6 +125,14 @@ public class Login {
         });
 
 
+    }
+
+    private User findUserByName(String user) {
+        for (User user1 : listaUzytkownikow) {
+            if (user1.nazwa.equals(user))
+                return user1;
+        }
+        return null;
     }
 
     private boolean czyJestUzytkownik(String user, String password) {
