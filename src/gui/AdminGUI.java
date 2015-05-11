@@ -39,6 +39,13 @@ public class AdminGUI {
     public TextField searchDescriptionBox;
     public TextField searchCategoryBox;
     public TextField searchBox;
+    public TableView<LocalItem> dbProductTable;
+    public TableColumn<LocalItem, Number> dbProductID;
+    public TableColumn<LocalItem, String> dbProductName;
+    public TableColumn<LocalItem, String> dbProductCategory;
+    public TableColumn<LocalItem, String> dbProductDescription;
+    public TableColumn<LocalItem, Number> dbProductPrice;
+    public TableColumn<LocalItem, Number> dbProductQuantity;
     IMeeting meeting;
     private ObservableList<Item> itemsOnList;
     @FXML
@@ -51,10 +58,12 @@ public class AdminGUI {
 
         meeting = new MeetingClient().connectToServer();
         createList();
+        printDatabaseEdit();
         itemListAdmin.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     selectedItem = itemListAdmin.getSelectionModel().getSelectedItem();
                     printResult();
+
                 });
     }
 
@@ -73,6 +82,34 @@ public class AdminGUI {
             productTable.setItems(itemsInTable);
             productTable.getItems().forEach(System.out::println);
         } else cleanTable();
+    }
+
+    private void printDatabaseEdit() {
+        ArrayList<Item> downloadedFromServer = null;
+        ObservableList<LocalItem> itemsToPrint = FXCollections.observableArrayList();
+        System.out.println("FUNKCJA: " + itemsToPrint);
+
+        try {
+            downloadedFromServer = meeting.getAllItems();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        if (downloadedFromServer != null) {
+            for (Item item : downloadedFromServer) {
+                itemsToPrint.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(), item.getPrice(), item.getQuantity(), item.getId()));
+            }
+
+            System.out.println("DRUKUJE LISTE: " + itemsToPrint);
+            dbProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
+            dbProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
+            dbProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
+            dbProductDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty);
+            dbProductPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty);
+            dbProductQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty);
+            dbProductTable.setItems(itemsToPrint);
+            dbProductTable.getItems().forEach(System.out::println);
+        }
     }
 
     public void createList() {

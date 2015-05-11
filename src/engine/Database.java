@@ -27,7 +27,7 @@ public class Database {
                         new Item("Sony Xperia T3", "Telefon", "Smartphone, Android 4.4 8Mpix", 800, 3, 12),
                         new Item("Microsoft Lumia 535", "Telefon", "Smartphone, Windows Phone 8.1, 5Mpix", 450, 2, 13),
                         new Item("Samsung Galaxy S6", "Telefon", "Smartphone, Android 5, 16 Mpix", 2699, 1, 14),
-                        new Item("Nak³adanie folii na ekran", "Uslugi", "Tanio, szybko, profesjonalnie", 10, 100, 15)
+                        new Item("Nakladanie folii na ekran", "Uslugi", "Tanio, szybko, profesjonalnie", 10, 100, 15)
 
 
                 ));
