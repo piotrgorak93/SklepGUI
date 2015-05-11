@@ -50,7 +50,7 @@
                                            onKeyPressed="#searchHandler"/>
                                 <TextField fx:id="searchCategoryBox" layoutX="21.0" layoutY="109.0"
                                            onKeyPressed="#searchByCategoryHandler"/>
-                                <TextField fx:id="searchDescripionBox" layoutX="21.0" layoutY="175.0"
+                                <TextField fx:id="searchDescriptionBox" layoutX="21.0" layoutY="175.0"
                                            onKeyPressed="#searchByDescriptionHandler"/>
                                 <TableView fx:id="foundProductTable" layoutX="197.0" layoutY="9.0" prefHeight="200.0"
                                            prefWidth="471.0">
@@ -63,9 +63,6 @@
                                         <TableColumn fx:id="foundProductQuantity" prefWidth="75.0" text="Ilość"/>
                                     </columns>
                                 </TableView>
-                                <Button fx:id="searchAddToBucketButton" layoutX="197.0" layoutY="224.0"
-                                        mnemonicParsing="false" onMouseClicked="#searchAddItemToBucket"
-                                        text="Dodaj do koszyka"/>
                             </children>
                         </AnchorPane>
                     </content>
@@ -88,10 +85,7 @@
                                         <TableColumn fx:id="bucketProductQuantity" prefWidth="75.0" text="Ilość"/>
                                     </columns>
                                 </TableView>
-                                <Button fx:id="buyItems" layoutX="197.0" layoutY="225.0" mnemonicParsing="false"
-                                        onMouseClicked="#buyItemsFromBucket" text="Kup przedmioty"/>
-                                <Button fx:id="removeItem" layoutX="197.0" layoutY="260.0" mnemonicParsing="false"
-                                        onMouseClicked="#removeFromBucket" text="Usun z koszyka"/>
+
                             </children>
                         </AnchorPane>
                     </content>

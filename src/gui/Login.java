@@ -113,7 +113,7 @@ public class Login {
                 lblMessage.setText("Congratulations!");
                 lblMessage.setTextFill(Color.GREEN);
                 if (checkUser.equals("admin")) {
-                    new AdminController(primaryStage,findUserByName("admin"));
+                    new AdminController(primaryStage);
                 } else
                     new ClientController(primaryStage);
             } else {

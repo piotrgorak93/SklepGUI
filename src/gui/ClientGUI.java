@@ -110,10 +110,7 @@ public class ClientGUI {
     }
 
     private void cleanTable() {
-//        ObservableList<Item> itemsInTable = FXCollections.observableArrayList(new Item("", "",
-//                "", "", selectedItem.getQuantity(), selectedItem.getId()));
         productTable.setItems(null);
-
     }
 
     public void addItemToBucket() {
