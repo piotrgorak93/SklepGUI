@@ -18,20 +18,23 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import rmi.rmiTestClient.MeetingClient;
+import rmi.rmiTestMeeting.IMeeting;
 
-import java.util.ArrayList;
+import java.rmi.RemoteException;
+import java.util.Random;
 
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
  */
 public class Login {
-    ArrayList<User> listaUzytkownikow = new ArrayList<>();
     String checkUser;
     String checkPw;
+    IMeeting meeting;
+    User userToLogin;
 
     public Login(Stage primaryStage) {
-        listaUzytkownikow.add(new User("admin", "admin"));
-        listaUzytkownikow.add(new User("user", "user"));
+        meeting = new MeetingClient().connectToServer();
         primaryStage.setTitle("Witaj w sklepie");
 
         BorderPane bp = new BorderPane();
@@ -109,13 +112,16 @@ public class Login {
         btnLogin.setOnAction(event -> {
             checkUser = txtUserName.getText();
             checkPw = pf.getText();
-            if (czyJestUzytkownik(checkUser, checkPw)) {
+            if (validateLogin(checkUser, checkPw)) {
                 lblMessage.setText("Congratulations!");
                 lblMessage.setTextFill(Color.GREEN);
+                this.userToLogin = getUserByName(checkUser);
                 if (checkUser.equals("admin")) {
                     new AdminController(primaryStage);
-                } else
+                } else {
+                    setLastLogged(userToLogin);
                     new ClientController(primaryStage);
+                }
             } else {
                 lblMessage.setText("Bledne dane logowania");
                 lblMessage.setTextFill(Color.RED);
@@ -127,20 +133,29 @@ public class Login {
 
     }
 
-    private User findUserByName(String user) {
-        for (User user1 : listaUzytkownikow) {
-            if (user1.nazwa.equals(user))
-                return user1;
+    private boolean validateLogin(String user, String password) {
+        try {
+            return meeting.validateUser(new User(user, password));
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private User getUserByName(String name) {
+        try {
+            return meeting.getUserByName(name);
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
-    private boolean czyJestUzytkownik(String user, String password) {
-        for (User user1 : listaUzytkownikow) {
-            if (user1.nazwa.equals(user) && user1.haslo.equals(password)) {
-                return true;
-            }
+    private void setLastLogged(User user) {
+        try {
+            meeting.setLastLogged(user);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return false;
     }
 }

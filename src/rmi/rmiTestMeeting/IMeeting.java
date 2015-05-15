@@ -1,6 +1,7 @@
 package rmi.rmiTestMeeting;
 
 import engine.Item;
+import gui.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -24,6 +25,29 @@ public interface IMeeting extends Remote {
     ArrayList<Item> sortItems(ArrayList<Item> itemArrayList) throws RemoteException;
 
     ArrayList<Item> sortReverseItems(ArrayList<Item> itemArrayList) throws RemoteException;
+
+    void removeFromBucket(User user, Item item) throws RemoteException;
+
+
+    User getUserByName(String name) throws RemoteException;
+
+    void setLastLogged(User user) throws RemoteException;
+
+    User getLastLogged() throws RemoteException;
+
+    ArrayList<Item> getUserBucket(User user) throws RemoteException;
+
+
+    void addToBucket(User user, Item item) throws RemoteException;
+
+
+    void clearBucket(User user) throws RemoteException;
+
+
+    boolean validateUser(User user) throws RemoteException;
+
+
+    void updateDatabase(ArrayList<Item> localDatabase) throws RemoteException;
 
 
 }

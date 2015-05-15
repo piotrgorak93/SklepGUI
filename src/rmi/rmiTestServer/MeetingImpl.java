@@ -2,9 +2,9 @@ package rmi.rmiTestServer;
 
 import engine.Database;
 import engine.Item;
+import gui.User;
 import gui.events.AddEvent;
 import gui.events.BuyEvent;
-import gui.events.RemoveEvent;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
@@ -15,11 +15,63 @@ import java.util.Collections;
 public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     private static final long serialVersionUID = 1L;
     private Database database;
+    ArrayList<User> userList = new ArrayList<>();
+    User lastLogged;
 
     public MeetingImpl() throws RemoteException {
         database = new Database();
+        userList.add(new User("admin", "admin"));
+        userList.add(new User("user", "user"));
     }
 
+    @Override
+    public User getUserByName(String name) {
+        for (User user1 : userList) {
+            if (user1.nazwa.equals(name)) return user1;
+        }
+        return null;
+    }
+
+    @Override
+    public void setLastLogged(User user) {
+        this.lastLogged = user;
+    }
+
+    @Override
+    public User getLastLogged() {
+        return lastLogged;
+    }
+
+    @Override
+    public ArrayList<Item> getUserBucket(User user) {
+        return getUserByName(user.nazwa).getMyBucket();
+    }
+
+    @Override
+    public void addToBucket(User user, Item item) {
+
+        findUserOnList(user).addToMyBucket(item);
+    }
+
+    @Override
+    public void removeFromBucket(User user, Item item) {
+        int index = this.userList.indexOf(user);
+        this.userList.get(index).removeFromBucket(item);
+    }
+
+    @Override
+    public void clearBucket(User user) {
+        int index = this.userList.indexOf(user);
+        this.userList.get(index).clearBucket();
+    }
+
+    @Override
+    public boolean validateUser(User user) {
+        for (User user1 : userList) {
+            if (user1.nazwa.equals(user.nazwa) && user1.haslo.equals(user.haslo)) return true;
+        }
+        return false;
+    }
 
     @Override
     public void addItem(Item item) throws RemoteException {
@@ -71,5 +123,20 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     public ArrayList<Item> sortReverseItems(ArrayList<Item> itemArrayList) throws RemoteException {
         Collections.sort(itemArrayList, Item.itemNameComparatorReverse);
         return itemArrayList;
+    }
+
+    @Override
+    public void updateDatabase(ArrayList<Item> localDatabase) {
+        this.database.updateDatabase(localDatabase);
+    }
+
+    public User findUserOnList(User user) {
+
+        for (User user1 : userList) {
+            if (user1.nazwa.equals(user.nazwa))
+                return user1;
+        }
+
+        return null;
     }
 }
