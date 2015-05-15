@@ -3,20 +3,22 @@ package rmi.rmiTestServer;
 import engine.Database;
 import engine.Item;
 import gui.User;
-import gui.events.AddEvent;
-import gui.events.BuyEvent;
+import gui.events.AddItemEvent;
+import gui.events.AddToBucketEvent;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     private static final long serialVersionUID = 1L;
     private Database database;
     ArrayList<User> userList = new ArrayList<>();
     User lastLogged;
+    public HashMap<Integer, User> loggedUsers = new HashMap<>();
 
     public MeetingImpl() throws RemoteException {
         database = new Database();
@@ -33,13 +35,13 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     }
 
     @Override
-    public void setLastLogged(User user) {
-        this.lastLogged = user;
+    public void addToLogged(User user, int id) {
+        loggedUsers.put(id, user);
     }
 
     @Override
-    public User getLastLogged() {
-        return lastLogged;
+    public User getLogged(int id) {
+        return loggedUsers.get(id);
     }
 
     @Override
@@ -55,14 +57,12 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
 
     @Override
     public void removeFromBucket(User user, Item item) {
-        int index = this.userList.indexOf(user);
-        this.userList.get(index).removeFromBucket(item);
+        findUserOnList(user).removeFromBucket(item);
     }
 
     @Override
     public void clearBucket(User user) {
-        int index = this.userList.indexOf(user);
-        this.userList.get(index).clearBucket();
+        findUserOnList(user).getMyBucket().clear();
     }
 
     @Override
@@ -76,13 +76,13 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     @Override
     public void addItem(Item item) throws RemoteException {
         database.addItemToDatabase(item);
-        new AddEvent();
+        new AddItemEvent();
     }
 
     @Override
     public void buyItem(Item item) throws RemoteException {
         database.removeItemFromDatabase(item);
-        new BuyEvent(item);
+        new AddToBucketEvent(item);
     }
 
     @Override

@@ -6,6 +6,7 @@ import gui.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public interface IMeeting extends Remote {
     void addItem(Item item) throws RemoteException;
@@ -31,9 +32,9 @@ public interface IMeeting extends Remote {
 
     User getUserByName(String name) throws RemoteException;
 
-    void setLastLogged(User user) throws RemoteException;
+    void addToLogged(User user, int id) throws RemoteException;
 
-    User getLastLogged() throws RemoteException;
+    User getLogged(int id) throws RemoteException;
 
     ArrayList<Item> getUserBucket(User user) throws RemoteException;
 

@@ -1,21 +1,25 @@
 package gui;
 
 import engine.Item;
-import gui.events.BuyEvent;
+import gui.events.AddToBucketEvent;
 import gui.events.CompleteEvent;
 import gui.events.NothingFound;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import rmi.rmiTestClient.MeetingClient;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
@@ -55,21 +59,37 @@ public class ClientGUI {
     public Button refreshList;
     public Button buyItems;
     public Button removeItem;
+    public TabPane tab;
 
+    int localQuantity;
+    ArrayList<LocalItem> tempList = new ArrayList<>();
+    ArrayList<Item> checked = new ArrayList<>();
     User user;
     IMeeting meeting;
     Item selectedItem;
     LocalItem selectedItemFound;
+    Item selectedItemInBucket;
     ObservableList<Item> itemsOnList = null;
     ObservableList<LocalItem> itemsInTable = null;
     ObservableList<LocalItem> itemsInResultTable = null;
     ObservableList<LocalItem> itemsInBucketTable = null;
+    int id;
 
     @FXML
     private void initialize() {
+        id = Login.staticId;
         meeting = new MeetingClient().connectToServer();
-
+        setUser();
+        try {
+            if (meeting.getUserBucket(user) != null) {
+                bucketPane.setDisable(false);
+            } else
+                bucketPane.setDisable(true);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         createList();
+        printBucket();
         itemList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     selectedItem = itemList.getSelectionModel().getSelectedItem();
@@ -79,19 +99,29 @@ public class ClientGUI {
                 .addListener((observable, oldValue, newValue) -> {
                     selectedItemFound = foundProductTable.getSelectionModel().getSelectedItem();
                 });
-        setUser();
+        bucketProductTable.getSelectionModel().selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    selectedItemInBucket = bucketProductTable.getSelectionModel().getSelectedItem();
+                });
 
     }
 
     public void setUser() {
         User local = null;
         try {
-            local = meeting.getLastLogged();
+            local = meeting.getLogged(id);
+
         } catch (RemoteException e) {
             e.printStackTrace();
         }
         this.user = local;
-        System.out.println("USER " + this.user);
+        try {
+            if (local != null) {
+                meeting.clearBucket(local);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createList() {
@@ -132,9 +162,8 @@ public class ClientGUI {
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-            bucketPane.setDisable(false);
-            printBucket();
             removeFromLocalStock(selectedItem);
+            printBucket();
         }
     }
 
@@ -161,12 +190,11 @@ public class ClientGUI {
             cleanTable();
         } else
             item.setQuantity(--quantity);
-        new BuyEvent(item);
+        new AddToBucketEvent(item);
         updateList();
     }
 
     private void updateList() {
-
         cleanTable();
         printResult();
     }
@@ -255,14 +283,36 @@ public class ClientGUI {
 
     private void printBucket() {
         itemsInBucketTable = FXCollections.observableArrayList();
+        ArrayList<Item> local = new ArrayList<>();
         try {
-            for (Item item : meeting.getUserBucket(user)) {
-                itemsInBucketTable.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(), item.getPrice(),
-                        1, item.getId()));
-            }
+            local = meeting.getUserBucket(user);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+
+        for (Item item : local) {
+            itemsInBucketTable.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(), item.getPrice(),
+                    1, item.getId()));
+        }
+        System.out.println("Wypisuje koszyk " + itemsInBucketTable);
+        for (int i = 0; i < itemsInBucketTable.size() - 1; i++) {
+            for (int j = i + 1; j < itemsInBucketTable.size(); j++) {
+                if (!isChecked(itemsInBucketTable.get(i))) {
+                    checked.add(itemsInBucketTable.get(i));
+                    if (itemsInBucketTable.get(i).getId() == itemsInBucketTable.get(j).getId())
+                        increaseQuantity(itemsInBucketTable.get(i));
+                }
+            }
+        }
+        for (int i = 0; i < itemsInBucketTable.size() - 1; i++) {
+            for (int j = i + 1; j < itemsInBucketTable.size(); j++) {
+                if (isTheSameItem(itemsInBucketTable.get(i), itemsInBucketTable.get(j))) {
+                    deleteItem(itemsInBucketTable.get(j));
+                }
+            }
+        }
+        System.out.println("Wypisuje koszyk " + itemsInBucketTable);
+
         bucketProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
         bucketProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
         bucketProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
@@ -273,11 +323,9 @@ public class ClientGUI {
     }
 
     public void removeFromBucket() {
-        try {
-            meeting.removeItem(selectedItem);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        System.out.println(user.getMyBucket());
+        user.removeFromBucket(selectedItemInBucket);
+        printBucket();
     }
 
     public void buyItemsFromBucket() {
@@ -296,5 +344,29 @@ public class ClientGUI {
         }
         new CompleteEvent(userBucket);
 
+    }
+
+    public boolean isChecked(Item item) {
+        for (Item item1 : checked) {
+            if (item1.getId() == item.getId())
+                return true;
+        }
+        return false;
+    }
+
+    public void increaseQuantity(LocalItem item) {
+        System.out.println("Ilosc przedmiotow przed " + item + " : " + item.getQuantity());
+        int local = item.getQuantity();
+        item.setQuantity(++local);
+        System.out.println("Ilosc przedmiotow po " + item + " : " + item.getQuantity());
+        item.quantityProperty = new SimpleIntegerProperty(local);
+    }
+
+    public boolean isTheSameItem(Item item, Item item2) {
+        return item.getId() == item2.getId();
+    }
+
+    public void deleteItem(Item item) {
+        itemsInBucketTable.remove(item);
     }
 }

@@ -22,7 +22,6 @@ import rmi.rmiTestClient.MeetingClient;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
-import java.util.Random;
 
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
@@ -32,8 +31,11 @@ public class Login {
     String checkPw;
     IMeeting meeting;
     User userToLogin;
+    private int id;
+    static int staticId = 0;
 
     public Login(Stage primaryStage) {
+        id = ++staticId;
         meeting = new MeetingClient().connectToServer();
         primaryStage.setTitle("Witaj w sklepie");
 
@@ -153,7 +155,7 @@ public class Login {
 
     private void setLastLogged(User user) {
         try {
-            meeting.setLastLogged(user);
+            meeting.addToLogged(user, id);
         } catch (Exception e) {
             e.printStackTrace();
         }

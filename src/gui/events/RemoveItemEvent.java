@@ -3,17 +3,16 @@ package gui.events;
 import engine.Item;
 import javafx.scene.control.Alert;
 
-import java.util.ArrayList;
-
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
  */
-public class CompleteEvent {
-    public CompleteEvent(ArrayList<Item> userBucket) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+public class RemoveItemEvent {
+    public RemoveItemEvent(Item item) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Informacja");
         alert.setHeaderText(null);
-        alert.setContentText("Kupiles przedmioty " + userBucket);
+        alert.setContentText("Usunieto z bazy " + item);
+
         alert.showAndWait();
     }
 }

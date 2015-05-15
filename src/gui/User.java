@@ -34,6 +34,4 @@ public class User implements Serializable {
     public void clearBucket() {
         this.myBucket.clear();
     }
-
-
 }
