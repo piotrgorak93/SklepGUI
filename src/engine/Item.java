@@ -1,8 +1,5 @@
 package engine;
 
-import javafx.beans.property.*;
-import javafx.scene.image.Image;
-
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -16,26 +13,13 @@ public class Item implements Serializable {
     private final String name;
 
 
-
     private final String description;
     private final double price;
     private int quantity;
     private final int id;
-//    public final StringProperty nameProperty;
-//    public final StringProperty categoryProperty;
-//    public final StringProperty descriptionProperty;
-//    public final DoubleProperty priceProperty;
-//    public final IntegerProperty quantityProperty;
-//    public final IntegerProperty idProperty;
-
 
     public Item(String name, String category, String description, double price, int quantity, int id) {
-//        this.nameProperty = new SimpleStringProperty(name);
-//        this.categoryProperty = new SimpleStringProperty(category);
-//        this.descriptionProperty = new SimpleStringProperty(description);
-//        this.priceProperty = new SimpleDoubleProperty(price);
-//        this.quantityProperty = new SimpleIntegerProperty(quantity);
-//
+
 
         this.name = name;
         this.category = category;
@@ -43,17 +27,12 @@ public class Item implements Serializable {
         this.price = price;
         this.quantity = quantity;
         this.id = id;
-//        this.idProperty = new SimpleIntegerProperty(this.id);
-
-        String plik = "../img/" + this.id + 1 + ".png";
-
-//        this.img = new Image(Item.class.getResourceAsStream("1.png"));
-
-
     }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
     public int getQuantity() {
         return quantity;
     }

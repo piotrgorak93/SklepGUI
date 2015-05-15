@@ -92,4 +92,8 @@ public class Database {
         System.out.println("Zwracam: " + itemsToReturn);
         return itemsToReturn;
     }
+
+    public void updateDatabase(ArrayList<Item> database) {
+        this.itemArrayList = database;
+    }
 }

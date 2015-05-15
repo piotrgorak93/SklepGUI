@@ -1,108 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane prefHeight="569.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane fx:id="root" prefHeight="569.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="gui.ClientGUI">
-    <children>
-        <TabPane prefHeight="569.0" prefWidth="818.0" tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab text="Przeglądaj produkty">
-                    <content>
-                        <AnchorPane prefHeight="425.0" prefWidth="600.0">
-                            <children>
-                                <ScrollPane hbarPolicy="AS_NEEDED" layoutX="14.0" layoutY="15.0" pannable="true"
-                                            prefHeight="268.0" prefWidth="218.0">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="387.0" prefWidth="221.0">
-                                            <children>
-                                                <ListView fx:id="itemList" editable="true" prefHeight="512.0"
-                                                          prefWidth="203.0"/>
-                                            </children>
-                                        </AnchorPane>
-                                    </content>
-                                </ScrollPane>
-                                <TableView id="table" fx:id="productTable" layoutX="241.0" layoutY="15.0"
-                                           prefHeight="268.0" prefWidth="447.0" tableMenuButtonVisible="true">
-                                    <columns>
-                                        <TableColumn fx:id="productID" prefWidth="75.0" text="ID"/>
-                                        <TableColumn fx:id="productName" prefWidth="75.0" text="Nazwa"/>
-                                        <TableColumn fx:id="productCategory" prefWidth="75.0" text="Kategoria"/>
-                                        <TableColumn fx:id="productDescription" prefWidth="75.0" text="Opis"/>
-                                        <TableColumn fx:id="productPrice" prefWidth="75.0" text="Cena"/>
-                                        <TableColumn fx:id="productQuantity" prefWidth="75.0" text="Ilość"/>
-                                    </columns>
-                                </TableView>
-                                <Button fx:id="addToBucketButton" layoutX="241.0" layoutY="301.0"
-                                        mnemonicParsing="false" onMouseClicked="#addItemToBucket"
-                                        text="Dodaj do koszyka"/>
-                                <Button layoutX="241.0" layoutY="345.0" mnemonicParsing="false" text="Odśwież listę"
-                                        fx:id="refreshList" onMouseClicked="#createList"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab text="Szukaj">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <Label layoutX="21.0" layoutY="14.0" text="Szukaj po nazwie"/>
-                                <Label layoutX="21.0" layoutY="79.0" text="Szukaj po kategorii"/>
-                                <Label layoutX="21.0" layoutY="149.0" text="Szukaj w opisie"/>
-                                <TextField fx:id="searchBox" layoutX="21.0" layoutY="40.0"
-                                           onKeyPressed="#searchHandler"/>
-                                <TextField fx:id="searchCategoryBox" layoutX="21.0" layoutY="109.0"
-                                           onKeyPressed="#searchByCategoryHandler"/>
-                                <TextField fx:id="searchDescriptionBox" layoutX="21.0" layoutY="175.0"
-                                           onKeyPressed="#searchByDescriptionHandler"/>
-                                <TableView fx:id="foundProductTable" layoutX="197.0" layoutY="9.0" prefHeight="200.0"
-                                           prefWidth="471.0">
-                                    <columns>
-                                        <TableColumn fx:id="foundProductID" prefWidth="75.0" text="ID"/>
-                                        <TableColumn fx:id="foundProductName" prefWidth="75.0" text="Nazwa"/>
-                                        <TableColumn fx:id="foundProductCategory" prefWidth="75.0" text="Kategoria"/>
-                                        <TableColumn fx:id="foundProductDescription" prefWidth="75.0" text="Opis"/>
-                                        <TableColumn fx:id="foundProductPrice" prefWidth="75.0" text="Cena"/>
-                                        <TableColumn fx:id="foundProductQuantity" prefWidth="75.0" text="Ilość"/>
-                                    </columns>
-                                </TableView>
-                                <Button fx:id="searchAddToBucketButton" layoutX="197.0" layoutY="224.0"
-                                        mnemonicParsing="false" onMouseClicked="#searchAddItemToBucket"
-                                        text="Dodaj do koszyka"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-                <Tab fx:id="bucketPane" disable="true" text="Koszyk">
-                    <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                            <children>
-                                <Label layoutX="31.0" layoutY="33.0" text="Twoje przedmioty:"/>
-                            </children>
-                            <children>
-                                <TableView fx:id="bucketProductTable" layoutX="197.0" layoutY="9.0" prefHeight="200.0"
-                                           prefWidth="471.0">
-                                    <columns>
-                                        <TableColumn fx:id="bucketProductID" prefWidth="75.0" text="ID"/>
-                                        <TableColumn fx:id="bucketProductName" prefWidth="75.0" text="Nazwa"/>
-                                        <TableColumn fx:id="bucketProductCategory" prefWidth="75.0" text="Kategoria"/>
-                                        <TableColumn fx:id="bucketProductDescription" prefWidth="75.0" text="Opis"/>
-                                        <TableColumn fx:id="bucketProductPrice" prefWidth="75.0" text="Cena"/>
-                                        <TableColumn fx:id="bucketProductQuantity" prefWidth="75.0" text="Ilość"/>
-                                    </columns>
-                                </TableView>
-                                <Button fx:id="buyItems" layoutX="197.0" layoutY="225.0" mnemonicParsing="false"
-                                        onMouseClicked="#buyItemsFromBucket" text="Kup przedmioty"/>
-                                <Button fx:id="removeItem" layoutX="197.0" layoutY="260.0" mnemonicParsing="false"
-                                        onMouseClicked="#removeFromBucket" text="Usun z koszyka"/>
-                            </children>
-                        </AnchorPane>
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
-        <Label layoutX="300.0" layoutY="6.0" prefHeight="17.0" prefWidth="277.0" AnchorPane.rightAnchor="55.0"/>
-    </children>
+    <TabPane prefHeight="569.0" prefWidth="818.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Przeglądaj produkty">
+            <AnchorPane prefHeight="425.0" prefWidth="600.0">
+                <ScrollPane hbarPolicy="AS_NEEDED" layoutX="14.0" layoutY="15.0" pannable="true"
+                            prefHeight="268.0" prefWidth="218.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="387.0" prefWidth="221.0">
+                        <ListView fx:id="itemList" editable="true" prefHeight="512.0"
+                                  prefWidth="203.0"/>
+                    </AnchorPane>
+                </ScrollPane>
+                <TableView id="table" fx:id="productTable" layoutX="241.0" layoutY="15.0"
+                           prefHeight="268.0" prefWidth="447.0" tableMenuButtonVisible="true">
+                    <columns>
+                        <TableColumn fx:id="productID" prefWidth="75.0" text="ID"/>
+                        <TableColumn fx:id="productName" prefWidth="75.0" text="Nazwa"/>
+                        <TableColumn fx:id="productCategory" prefWidth="75.0" text="Kategoria"/>
+                        <TableColumn fx:id="productDescription" prefWidth="75.0" text="Opis"/>
+                        <TableColumn fx:id="productPrice" prefWidth="75.0" text="Cena"/>
+                        <TableColumn fx:id="productQuantity" prefWidth="75.0" text="Ilość"/>
+                    </columns>
+                </TableView>
+                <Button fx:id="addToBucketButton" layoutX="241.0" layoutY="301.0"
+                        mnemonicParsing="false" onMouseClicked="#addItemToBucket"
+                        text="Dodaj do koszyka"/>
+                <Button layoutX="241.0" layoutY="345.0" mnemonicParsing="false" text="Odśwież listę"
+                        fx:id="refreshList" onMouseClicked="#createList"/>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Szukaj">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <Label layoutX="21.0" layoutY="14.0" text="Szukaj po nazwie"/>
+                <Label layoutX="21.0" layoutY="79.0" text="Szukaj po kategorii"/>
+                <Label layoutX="21.0" layoutY="149.0" text="Szukaj w opisie"/>
+                <TextField fx:id="searchBox" layoutX="21.0" layoutY="40.0"
+                           onKeyPressed="#searchHandler"/>
+                <TextField fx:id="searchCategoryBox" layoutX="21.0" layoutY="109.0"
+                           onKeyPressed="#searchByCategoryHandler"/>
+                <TextField fx:id="searchDescriptionBox" layoutX="21.0" layoutY="175.0"
+                           onKeyPressed="#searchByDescriptionHandler"/>
+                <TableView fx:id="foundProductTable" layoutX="197.0" layoutY="9.0" prefHeight="200.0"
+                           prefWidth="471.0">
+                    <columns>
+                        <TableColumn fx:id="foundProductID" prefWidth="75.0" text="ID"/>
+                        <TableColumn fx:id="foundProductName" prefWidth="75.0" text="Nazwa"/>
+                        <TableColumn fx:id="foundProductCategory" prefWidth="75.0" text="Kategoria"/>
+                        <TableColumn fx:id="foundProductDescription" prefWidth="75.0" text="Opis"/>
+                        <TableColumn fx:id="foundProductPrice" prefWidth="75.0" text="Cena"/>
+                        <TableColumn fx:id="foundProductQuantity" prefWidth="75.0" text="Ilość"/>
+                    </columns>
+                </TableView>
+                <Button fx:id="searchAddToBucketButton" layoutX="197.0" layoutY="224.0"
+                        mnemonicParsing="false" onMouseClicked="#searchAddItemToBucket"
+                        text="Dodaj do koszyka"/>
+            </AnchorPane>
+        </Tab>
+        <Tab fx:id="bucketPane" disable="true" text="Koszyk">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <TableView fx:id="bucketProductTable" layoutX="197.0" layoutY="9.0" prefHeight="200.0"
+                           prefWidth="471.0">
+                    <columns>
+                        <TableColumn fx:id="bucketProductID" prefWidth="75.0" text="ID"/>
+                        <TableColumn fx:id="bucketProductName" prefWidth="75.0" text="Nazwa"/>
+                        <TableColumn fx:id="bucketProductCategory" prefWidth="75.0" text="Kategoria"/>
+                        <TableColumn fx:id="bucketProductDescription" prefWidth="75.0" text="Opis"/>
+                        <TableColumn fx:id="bucketProductPrice" prefWidth="75.0" text="Cena"/>
+                        <TableColumn fx:id="bucketProductQuantity" prefWidth="75.0" text="Ilość"/>
+                    </columns>
+                </TableView>
+                <Button fx:id="buyItems" layoutX="197.0" layoutY="225.0" mnemonicParsing="false"
+                        onMouseClicked="#buyItemsFromBucket" text="Kup przedmioty"/>
+                <Button fx:id="removeItem" layoutX="197.0" layoutY="260.0" mnemonicParsing="false"
+                        onMouseClicked="#removeFromBucket" text="Usun z koszyka"/>
+                <Label layoutX="31.0" layoutY="33.0" text="Twoje przedmioty:"/>
+            </AnchorPane>
+        </Tab>
+    </TabPane>
+    <Label layoutX="300.0" layoutY="6.0" prefHeight="17.0" prefWidth="277.0" AnchorPane.rightAnchor="55.0"/>
 </AnchorPane>
