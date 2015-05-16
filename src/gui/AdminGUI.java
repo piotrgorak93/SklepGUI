@@ -61,12 +61,14 @@ public class AdminGUI {
     ArrayList<Item> downloadedFromServer;
     private ArrayList<Item> localDatabase;
     private Item selectedItemDB;
+    ObservableList<LocalItem> itemsToPrint;
 
     @FXML
     private void initialize() {
 
         meeting = new MeetingClient().connectToServer();
-        listenerAdd();
+        addToDatabase(null);
+//        listenerAdd();
         listenerRemove();
         listenerSave();
         createList();
@@ -103,7 +105,7 @@ public class AdminGUI {
     private void printDatabaseEdit() {
 
 
-        ObservableList<LocalItem> itemsToPrint = FXCollections.observableArrayList();
+        itemsToPrint = FXCollections.observableArrayList();
         System.out.println("FUNKCJA: " + itemsToPrint);
 
         try {
@@ -259,11 +261,7 @@ public class AdminGUI {
     }
 
     public void addToDatabase(Item item) {
-        try {
-            meeting.addItem(item);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        addToDB.setOnAction(e -> itemsToPrint.add(new LocalItem("new", "new", "new", 1.0, 1, 1)));
     }
 
     public void removeFromDatabase(Item item) {

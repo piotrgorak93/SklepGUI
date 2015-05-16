@@ -152,6 +152,23 @@ public class ClientGUI {
         productTable.setItems(null);
     }
 
+    public boolean isInBucket(Item item) {
+        ArrayList<Item> bucket = new ArrayList<>();
+
+        try {
+            bucket = meeting.getUserBucket(user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        for (Item item1 : bucket) {
+            if (item1.getId() == item.getId()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void addItemToBucket() {
         if (selectedItem != null) {
             try {
@@ -162,19 +179,21 @@ public class ClientGUI {
             removeFromLocalStock(selectedItem);
             printBucket();
         }
+
     }
 
     public void searchAddItemToBucket() {
-
+        Item local = new Item(selectedItemFound.getName(), selectedItemFound.getCategory(),
+                selectedItemFound.getDescription(), selectedItemFound.getPrice(), selectedItemFound.getQuantity(), selectedItemFound.getQuantity());
         try {
-            meeting.addToBucket(user, selectedItemFound);
+            meeting.addToBucket(user, local);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        System.out.println(itemsOnList);
-        bucketPane.setDisable(false);
-        removeFromLocalStock(selectedItemFound);
-        itemsInResultTable.remove(selectedItemFound);
+        System.out.println("Found " + local);
+        System.out.println("Wyniki: " + itemsInResultTable);
+        removeFromLocalStock(local);
+        itemsInResultTable.remove(local);
         printBucket();
     }
 
@@ -200,7 +219,6 @@ public class ClientGUI {
                 item1.setQuantity(globQ + localQ);
             }
         }
-
     }
 
     private void updateList() {
@@ -320,8 +338,7 @@ public class ClientGUI {
                 }
             }
         }
-        System.out.println("Wypisuje koszyk " + itemsInBucketTable);
-
+        checked.clear();
         bucketProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
         bucketProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
         bucketProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
