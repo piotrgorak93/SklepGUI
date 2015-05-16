@@ -28,7 +28,12 @@ public class User implements Serializable {
     }
 
     public void removeFromBucket(Item item) {
-        this.myBucket.remove(item);
+        for (int i = 0; i < myBucket.size(); i++) {
+            if (myBucket.get(i).getId() == item.getId()) {
+                myBucket.remove(i);
+                break;
+            }
+        }
     }
 
     public void clearBucket() {

@@ -13,7 +13,10 @@ public class CompleteEvent {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informacja");
         alert.setHeaderText(null);
-        alert.setContentText("Kupiles przedmioty " + userBucket);
+        if (!userBucket.isEmpty())
+            alert.setContentText("Kupiles przedmioty " + userBucket);
+        else
+            alert.setContentText("Brak przedmiotow w koszyku");
         alert.showAndWait();
     }
 }

@@ -2,6 +2,7 @@ package rmi.rmiTestMeeting;
 
 import engine.Item;
 import gui.User;
+import javafx.collections.ObservableList;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

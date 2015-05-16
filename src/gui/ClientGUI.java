@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import rmi.rmiTestClient.MeetingClient;
@@ -17,9 +16,6 @@ import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Random;
 
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
@@ -61,14 +57,12 @@ public class ClientGUI {
     public Button removeItem;
     public TabPane tab;
 
-    int localQuantity;
-    ArrayList<LocalItem> tempList = new ArrayList<>();
     ArrayList<Item> checked = new ArrayList<>();
     User user;
     IMeeting meeting;
     Item selectedItem;
     LocalItem selectedItemFound;
-    Item selectedItemInBucket;
+    LocalItem selectedItemInBucket;
     ObservableList<Item> itemsOnList = null;
     ObservableList<LocalItem> itemsInTable = null;
     ObservableList<LocalItem> itemsInResultTable = null;
@@ -125,9 +119,13 @@ public class ClientGUI {
     }
 
     public void createList() {
+
         try {
             itemsOnList = FXCollections.observableArrayList(
                     meeting.getAllItems());
+            ArrayList<Item> arr = new ArrayList<>(itemsOnList);
+            arr = meeting.sortItems(arr);
+            itemsOnList = FXCollections.observableList(arr);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -147,7 +145,6 @@ public class ClientGUI {
             productPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty);
             productQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty);
             productTable.setItems(itemsInTable);
-            productTable.getItems().forEach(System.out::println);
         } else cleanTable();
     }
 
@@ -323,9 +320,18 @@ public class ClientGUI {
     }
 
     public void removeFromBucket() {
-        System.out.println(user.getMyBucket());
-        user.removeFromBucket(selectedItemInBucket);
-        printBucket();
+        if (selectedItemInBucket != null) {
+            System.out.println("Koszyk lokalny " + user.getMyBucket());
+            System.out.println("Przedmiot w koszyku " + selectedItemInBucket);
+            Item toDelete = new Item(selectedItemInBucket.getName(), selectedItemInBucket.getCategory(),
+                    selectedItemInBucket.getDescription(), selectedItemInBucket.getPrice(), selectedItemInBucket.getQuantity(), selectedItemInBucket.getId());
+            try {
+                meeting.removeFromBucket(user, toDelete);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            printBucket();
+        }
     }
 
     public void buyItemsFromBucket() {
@@ -343,6 +349,7 @@ public class ClientGUI {
             }
         }
         new CompleteEvent(userBucket);
+        cleanTable();
 
     }
 

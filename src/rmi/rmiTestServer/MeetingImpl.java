@@ -5,6 +5,7 @@ import engine.Item;
 import gui.User;
 import gui.events.AddItemEvent;
 import gui.events.AddToBucketEvent;
+import javafx.collections.ObservableList;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
@@ -51,12 +52,12 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
 
     @Override
     public void addToBucket(User user, Item item) {
-
         findUserOnList(user).addToMyBucket(item);
     }
 
     @Override
     public void removeFromBucket(User user, Item item) {
+        System.out.println("USUWAM " + item);
         findUserOnList(user).removeFromBucket(item);
     }
 
