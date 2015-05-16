@@ -21,7 +21,6 @@ public class ClientController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArrayList<Item> localBucket;
         Stage stage2 = new Stage();
         stage2.setScene(new Scene(root, stage2.getWidth(), stage2.getHeight()));
         stage2.show();

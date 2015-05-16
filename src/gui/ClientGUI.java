@@ -87,7 +87,7 @@ public class ClientGUI {
         itemList.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
                     selectedItem = itemList.getSelectionModel().getSelectedItem();
-                    printResult();
+                    printListOfItems();
                 });
         foundProductTable.getSelectionModel().selectedItemProperty()
                 .addListener((observable, oldValue, newValue) -> {
@@ -132,7 +132,7 @@ public class ClientGUI {
         itemList.setItems(itemsOnList);
     }
 
-    public void printResult() {
+    public void printListOfItems() {
         if (selectedItem != null) {
             itemsInTable = FXCollections.observableArrayList(new LocalItem(selectedItem.getName(), selectedItem.getCategory(),
                     selectedItem.getDescription(), selectedItem.getPrice(), selectedItem.getQuantity(),
@@ -191,9 +191,21 @@ public class ClientGUI {
         updateList();
     }
 
+    public void resetItemToStock(Item item) {
+        for (Item item1 : itemsOnList) {
+            if (item.getId() == item1.getId()) {
+                System.out.println(item.getQuantity());
+                int localQ = item.getQuantity();
+                int globQ = item1.getQuantity();
+                item1.setQuantity(globQ + localQ);
+            }
+        }
+
+    }
+
     private void updateList() {
         cleanTable();
-        printResult();
+        printListOfItems();
     }
 
     @FXML
@@ -321,16 +333,17 @@ public class ClientGUI {
 
     public void removeFromBucket() {
         if (selectedItemInBucket != null) {
-            System.out.println("Koszyk lokalny " + user.getMyBucket());
-            System.out.println("Przedmiot w koszyku " + selectedItemInBucket);
             Item toDelete = new Item(selectedItemInBucket.getName(), selectedItemInBucket.getCategory(),
-                    selectedItemInBucket.getDescription(), selectedItemInBucket.getPrice(), selectedItemInBucket.getQuantity(), selectedItemInBucket.getId());
+                    selectedItemInBucket.getDescription(), selectedItemInBucket.getPrice(),
+                    selectedItemInBucket.getQuantity(), selectedItemInBucket.getId());
             try {
                 meeting.removeFromBucket(user, toDelete);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
             printBucket();
+            resetItemToStock(toDelete);
+            printListOfItems();
         }
     }
 
