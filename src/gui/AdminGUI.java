@@ -4,9 +4,6 @@ import engine.Item;
 import gui.events.NothingFound;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -67,8 +64,7 @@ public class AdminGUI {
     private void initialize() {
 
         meeting = new MeetingClient().connectToServer();
-        addToDatabase(null);
-//        listenerAdd();
+        addToDatabaseButtonListener();
         listenerRemove();
         listenerSave();
         createList();
@@ -260,7 +256,7 @@ public class AdminGUI {
         productTable.setItems(null);
     }
 
-    public void addToDatabase(Item item) {
+    public void addToDatabaseButtonListener() {
         addToDB.setOnAction(e -> itemsToPrint.add(new LocalItem("new", "new", "new", 1.0, 1, 1)));
     }
 
@@ -280,12 +276,8 @@ public class AdminGUI {
         }
     }
 
-    public void listenerAdd() {
-        addToDB.setOnAction(event -> addToDatabase(selectedItemDB));
-    }
-
     public void listenerRemove() {
-        removeFromDB.setOnAction(event -> removeFromDatabase(selectedItemDB));
+        removeFromDB.setOnAction(e -> itemsToPrint.remove(selectedItemDB));
     }
 
     public void listenerSave() {
