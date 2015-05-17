@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import org.omg.CORBA.INTERNAL;
 import rmi.rmiTestClient.MeetingClient;
 import rmi.rmiTestMeeting.IMeeting;
 
@@ -125,6 +124,7 @@ public class ClientGUI {
         try {
             itemsOnList = FXCollections.observableArrayList(
                     meeting.getAllItems());
+            cleanBucketTable();
             ArrayList<Item> arr = new ArrayList<>(itemsOnList);
             arr = meeting.sortItems(arr);
             itemsOnList = FXCollections.observableList(arr);
@@ -139,7 +139,6 @@ public class ClientGUI {
             itemsInTable = FXCollections.observableArrayList(new LocalItem(selectedItem.getName(), selectedItem.getCategory(),
                     selectedItem.getDescription(), selectedItem.getPrice(), selectedItem.getQuantity(),
                     selectedItem.getId()));
-
             productID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
             productName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
             productCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
@@ -169,6 +168,15 @@ public class ClientGUI {
         }
 
         return false;
+    }
+
+    public void cleanBucketTable() {
+        try {
+            meeting.clearBucket(user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        bucketProductTable.setItems(null);
     }
 
     public void addItemToBucket() {
@@ -216,9 +224,8 @@ public class ClientGUI {
         for (Item item1 : itemsOnList) {
             if (item.getId() == item1.getId()) {
                 System.out.println(item.getQuantity());
-                int localQ = item.getQuantity();
                 int globQ = item1.getQuantity();
-                item1.setQuantity(globQ + localQ);
+                item1.setQuantity(++globQ);
             }
         }
     }
@@ -384,7 +391,7 @@ public class ClientGUI {
         for (Item item : checked.keySet()) {
             localItems.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(),
                     item.getPrice(), returnValueFromMap(item), item.getId()));
-            System.out.println("WYPISUJE "+localItems);
+            System.out.println("WYPISUJE " + localItems);
         }
         return localItems;
 
