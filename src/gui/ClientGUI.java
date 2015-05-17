@@ -3,6 +3,7 @@ package gui;
 import engine.Item;
 import gui.events.AddToBucketEvent;
 import gui.events.CompleteEvent;
+import gui.events.NoFunctionEvent;
 import gui.events.NothingFound;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -192,24 +193,25 @@ public class ClientGUI {
     }
 
     public void searchAddItemToBucket() {
-        if (selectedItemFound != null) {
-            System.out.println(selectedItemFound);
-            Item local = new Item(selectedItemFound.getName(), selectedItemFound.getCategory(),
-                    selectedItemFound.getDescription(), selectedItemFound.getPrice(), selectedItemFound.getQuantity(), selectedItemFound.getQuantity());
-            try {
-                meeting.addToBucket(user, local);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-            System.out.println("Found " + local);
-            System.out.println("Wyniki: " + itemsInResultTable);
-            removeFromLocalStock(local);
-            cleanResultTable();
-            //ArrayList<Item> temp = deleteFromResultTable(local);
-            //printSearchResults(temp);
-            printBucket();
-
-        }
+//        if (selectedItemFound != null) {
+//            System.out.println(selectedItemFound);
+//            Item local = new Item(selectedItemFound.getName(), selectedItemFound.getCategory(),
+//                    selectedItemFound.getDescription(), selectedItemFound.getPrice(), selectedItemFound.getQuantity(), selectedItemFound.getQuantity());
+//            try {
+//                meeting.addToBucket(user, local);
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//            }
+//            System.out.println("Found " + local);
+//            System.out.println("Wyniki: " + itemsInResultTable);
+//            removeFromLocalStock(local);
+//            cleanResultTable();
+//            //ArrayList<Item> temp = deleteFromResultTable(local);
+//            //printSearchResults(temp);
+//            printBucket();
+//
+//        }
+        new NoFunctionEvent();
     }
 
     private ArrayList<Item> deleteFromResultTable(Item local) {

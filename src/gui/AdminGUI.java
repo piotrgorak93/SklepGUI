@@ -263,7 +263,6 @@ public class AdminGUI {
 
     public void addToDatabaseButtonListener() {
         addToDB.setOnAction(e -> {
-
             if (checkIfAdd()) {
                 LocalItem itemToAdd = new LocalItem(newName.getText(), newCategory.getText(), newDescription.getText(),
                         Double.parseDouble(newPrice.getText()), Integer.parseInt(newQuantity.getText()), Integer.parseInt(newId.getText()));
@@ -319,7 +318,23 @@ public class AdminGUI {
     }
 
     public void removeFromDatabaseButtonListener() {
-        removeFromDB.setOnAction(e -> itemsToPrint.remove(selectedItemDB));
+        removeFromDB.setOnAction(e -> {
+            new RemoveItemEvent(selectedItemDB);
+            if (selectedItemDB.getQuantity() == 1)
+                itemsToPrint.remove(selectedItemDB);
+            else
+                for (LocalItem localItem : itemsToPrint) {
+                    if (localItem.getId() == selectedItemDB.getId()) {
+                        int temp = localItem.getQuantity();
+                        int index = itemsToPrint.indexOf(localItem);
+                        itemsToPrint.remove(index);
+                        itemsToPrint.add(index, new LocalItem(localItem.getName(), localItem.getCategory(),
+                                localItem.getDescription(), localItem.getPrice(), --temp, localItem.getId()));
+                        break;
+
+                    }
+                }
+        });
     }
 
     public void saveDatabaseButtonListener() {
