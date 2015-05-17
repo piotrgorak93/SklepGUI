@@ -49,6 +49,12 @@ public class AdminGUI {
     public Button addToDB;
     public Button removeFromDB;
     public Button saveToDB;
+    public TextField newId;
+    public TextField newName;
+    public TextField newCategory;
+    public TextField newDescription;
+    public TextField newPrice;
+    public TextField newQuantity;
     IMeeting meeting;
     private ObservableList<Item> itemsOnList;
     @FXML
@@ -65,8 +71,8 @@ public class AdminGUI {
 
         meeting = new MeetingClient().connectToServer();
         addToDatabaseButtonListener();
-        listenerRemove();
-        listenerSave();
+        removeFromDatabaseButtonListener();
+        saveDatabaseButtonListener();
         createList();
         printDatabaseEdit();
         itemListAdmin.getSelectionModel().selectedItemProperty()
@@ -99,8 +105,6 @@ public class AdminGUI {
     }
 
     private void printDatabaseEdit() {
-
-
         itemsToPrint = FXCollections.observableArrayList();
         System.out.println("FUNKCJA: " + itemsToPrint);
 
@@ -143,8 +147,10 @@ public class AdminGUI {
             );
             dbProductPrice.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
             dbProductPrice.setOnEditCommit(
-                    event -> event.getTableView().getItems().get(
-                            event.getTablePosition().getRow()).setNewPrice(event.getNewValue())
+                    event -> {
+                        event.getTableView().getItems().get(
+                                event.getTablePosition().getRow()).setNewPrice(event.getNewValue());
+                    }
             );
 
             dbProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
@@ -157,7 +163,6 @@ public class AdminGUI {
         }
 
     }
-
 
     public void createList() {
         try {
@@ -257,7 +262,10 @@ public class AdminGUI {
     }
 
     public void addToDatabaseButtonListener() {
-        addToDB.setOnAction(e -> itemsToPrint.add(new LocalItem("new", "new", "new", 1.0, 1, 1)));
+        addToDB.setOnAction(e -> {
+            itemsToPrint.add(new LocalItem(newName.getText(), newCategory.getText(), newDescription.getText(),
+                    Double.parseDouble(newPrice.getText()), Integer.parseInt(newQuantity.getText()), Integer.parseInt(newId.getText())));
+        });
     }
 
     public void removeFromDatabase(Item item) {
@@ -269,18 +277,30 @@ public class AdminGUI {
     }
 
     public void saveDatabase() {
+        ArrayList<Item> listToSave = new ArrayList<>();
+        ObservableList<LocalItem> localItemsToSave;
+        localItemsToSave = dbProductTable.getItems();
+        System.out.println(itemsToPrint);
+        for (LocalItem localItem : localItemsToSave) {
+            System.out.println(localItem.getName() + " " + localItem.getPrice());
+            listToSave.add(new Item(localItem.getName(), localItem.getCategory(),
+                    localItem.getDescription(), localItem.getPrice(), localItem.getQuantity(), localItem.getId()));
+        }
+
+
+        System.out.println(listToSave);
         try {
-            meeting.updateDatabase(downloadedFromServer);
+            meeting.updateDatabase(listToSave);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
     }
 
-    public void listenerRemove() {
+    public void removeFromDatabaseButtonListener() {
         removeFromDB.setOnAction(e -> itemsToPrint.remove(selectedItemDB));
     }
 
-    public void listenerSave() {
+    public void saveDatabaseButtonListener() {
         saveToDB.setOnAction(event -> saveDatabase());
     }
 

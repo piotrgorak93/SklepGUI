@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
+<?import com.sun.javafx.scene.control.skin.IntegerField?>
+<?import com.sun.javafx.scene.control.skin.DoubleField?>
 <AnchorPane prefHeight="569.0" prefWidth="818.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="gui.AdminGUI">
     <children>
@@ -85,13 +89,25 @@
                                         <TableColumn fx:id="dbProductQuantity" prefWidth="75.0" text="Ilość"/>
                                     </columns>
                                 </TableView>
-                                <Button layoutX="197.0" layoutY="245.0" mnemonicParsing="false" text="Dodaj"
-                                        fx:id="addToDB"/>
-                                <Button layoutX="271.0" layoutY="245.0" mnemonicParsing="false" text="Usuń"
-                                        fx:id="removeFromDB"/>
-                                <Button layoutX="341.0" layoutY="245.0" mnemonicParsing="false" text="Zapisz"
-                                        fx:id="saveToDB"/>
 
+                                <TextField layoutX="197.0" layoutY="225.0" prefHeight="25.0" prefWidth="75.0"
+                                           fx:id="newId" promptText="ID"/>
+                                <TextField layoutX="276.0" layoutY="225.0" prefHeight="25.0" prefWidth="77.0"
+                                           fx:id="newName" promptText="Nazwa"/>
+                                <TextField layoutX="356.0" layoutY="225.0" prefHeight="25.0" prefWidth="70.0"
+                                           fx:id="newCategory" promptText="Kategoria"/>
+                                <TextField layoutX="433.0" layoutY="225.0" prefHeight="25.0" prefWidth="67.0"
+                                           fx:id="newDescription" promptText="Opis"/>
+                                <TextField layoutX="509.0" layoutY="225.0" prefHeight="25.0" prefWidth="65.0"
+                                           fx:id="newPrice" promptText="Cena"/>
+                                <TextField layoutX="584.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0"
+                                           fx:id="newQuantity" promptText="Ilosc"/>
+                                <Button fx:id="addToDB" layoutX="197.0" layoutY="265.0" mnemonicParsing="false"
+                                        text="Dodaj"/>
+                                <Button fx:id="removeFromDB" layoutX="271.0" layoutY="265.0" mnemonicParsing="false"
+                                        text="Usuń"/>
+                                <Button fx:id="saveToDB" layoutX="341.0" layoutY="265.0" mnemonicParsing="false"
+                                        text="Zapisz"/>
                             </children>
                         </AnchorPane>
                     </content>

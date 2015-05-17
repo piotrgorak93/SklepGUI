@@ -5,7 +5,6 @@ import engine.Item;
 import gui.User;
 import gui.events.AddItemEvent;
 import gui.events.AddToBucketEvent;
-import javafx.collections.ObservableList;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;

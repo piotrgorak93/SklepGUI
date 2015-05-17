@@ -42,6 +42,7 @@ public class LocalItem extends Item {
     }
 
     public void setNewPrice(Number newValue) {
+        System.out.println("USTAWIAM NOWA CENE z " + this.priceProperty + " na " + newValue);
         this.priceProperty = new SimpleDoubleProperty(newValue.doubleValue());
     }
 
