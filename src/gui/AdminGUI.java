@@ -1,7 +1,7 @@
 package gui;
 
 import engine.Item;
-import gui.events.NothingFound;
+import gui.events.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -263,9 +263,38 @@ public class AdminGUI {
 
     public void addToDatabaseButtonListener() {
         addToDB.setOnAction(e -> {
-            itemsToPrint.add(new LocalItem(newName.getText(), newCategory.getText(), newDescription.getText(),
-                    Double.parseDouble(newPrice.getText()), Integer.parseInt(newQuantity.getText()), Integer.parseInt(newId.getText())));
+
+            if (checkIfAdd()) {
+                LocalItem itemToAdd = new LocalItem(newName.getText(), newCategory.getText(), newDescription.getText(),
+                        Double.parseDouble(newPrice.getText()), Integer.parseInt(newQuantity.getText()), Integer.parseInt(newId.getText()));
+                itemsToPrint.add(itemToAdd);
+                new AddItemEvent(itemToAdd);
+            } else {
+                new AddItemErrorEvent();
+            }
         });
+    }
+
+    public boolean checkIfAdd() {
+        if (checkIfFieldsNotEmpty()) {
+            if (validateFields())
+                return true;
+            else {
+                new NoValidateEvent();
+                return false;
+            }
+        } else return false;
+    }
+
+    public boolean checkIfFieldsNotEmpty() {
+        return !newName.getText().equals("") && !newCategory.getText().equals("") && !newDescription.getText().equals("") &&
+                !newPrice.getText().equals("") && !newQuantity.getText().equals("") && !newId.getText().equals("");
+    }
+
+    public boolean validateFields() {
+        return newPrice.getText().matches("\\d+[\\.]\\d\\d")
+                && newQuantity.getText().matches("\\d")
+                && newId.getText().matches("\\d");
     }
 
     public void removeFromDatabase(Item item) {
@@ -294,6 +323,7 @@ public class AdminGUI {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+        new DatabaseSavedEvent();
     }
 
     public void removeFromDatabaseButtonListener() {

@@ -76,7 +76,6 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     @Override
     public void addItem(Item item) throws RemoteException {
         database.addItemToDatabase(item);
-        new AddItemEvent();
     }
 
     @Override
@@ -87,8 +86,6 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
 
     @Override
     public void removeItem(Item item) throws RemoteException {
-
-//        new RemoveEvent(item);
         database.removeItemFromDatabase(item);
 
     }
