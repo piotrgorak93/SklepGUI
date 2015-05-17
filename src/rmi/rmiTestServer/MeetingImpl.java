@@ -17,7 +17,6 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     private static final long serialVersionUID = 1L;
     private Database database;
     ArrayList<User> userList = new ArrayList<>();
-    User lastLogged;
     public HashMap<Integer, User> loggedUsers = new HashMap<>();
 
     public MeetingImpl() throws RemoteException {
@@ -88,6 +87,12 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
     public void removeItem(Item item) throws RemoteException {
         database.removeItemFromDatabase(item);
 
+    }
+
+    @Override
+    public void addItems(ArrayList<Item> items, User user) throws RemoteException {
+        clearBucket(user);
+        findUserOnList(user).setBucket(items);
     }
 
     @Override

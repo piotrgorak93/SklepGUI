@@ -13,8 +13,13 @@ public class CompleteEvent {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informacja");
         alert.setHeaderText(null);
+        double wynik = 0;
+        for (Item item : userBucket) {
+            wynik += item.getPrice() * item.getQuantity();
+        }
+
         if (!userBucket.isEmpty())
-            alert.setContentText("Kupiles przedmioty " + userBucket);
+            alert.setContentText("Kupiles przedmioty " + userBucket + ", zaplaciles " + wynik);
         else
             alert.setContentText("Brak przedmiotow w koszyku");
         alert.showAndWait();

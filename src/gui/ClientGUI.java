@@ -384,6 +384,14 @@ public class ClientGUI {
         bucketProductQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty);
         bucketProductTable.setItems(list);
         checked.clear();
+        local.clear();
+        for (LocalItem localItem : list) {
+            local.add(new Item(localItem.getName(), localItem.getCategory(), localItem.getDescription(),
+                    localItem.getPrice(), localItem.getQuantity(), localItem.getId()));
+
+        }
+
+        updateBucket(local);
     }
 
     public ObservableList<LocalItem> createTable() {
@@ -395,6 +403,14 @@ public class ClientGUI {
         }
         return localItems;
 
+    }
+
+    private void updateBucket(ArrayList<Item> items) {
+        try {
+            meeting.addItems(items, user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     public void removeFromBucket() {
@@ -429,23 +445,6 @@ public class ClientGUI {
         }
         new CompleteEvent(userBucket);
         cleanTable();
-
-    }
-
-
-    public void increaseQuantity(LocalItem item) {
-        System.out.println("Ilosc przedmiotow przed " + item + " : " + item.getQuantity());
-        int local = item.getQuantity();
-        item.setQuantity(++local);
-        System.out.println("Ilosc przedmiotow po " + item + " : " + item.getQuantity());
-        item.quantityProperty = new SimpleIntegerProperty(local);
-    }
-
-    public boolean isTheSameItem(Item item, Item item2) {
-        return item.getId() == item2.getId();
-    }
-
-    public void deleteItem(Item item) {
-        itemsInBucketTable.remove(item);
+        cleanBucketTable();
     }
 }

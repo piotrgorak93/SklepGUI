@@ -36,7 +36,8 @@ public class User implements Serializable {
         }
     }
 
-    public void clearBucket() {
-        this.myBucket.clear();
+    public void setBucket(ArrayList<Item> items) {
+        myBucket = items;
+        System.out.println("MOJ KOSZYK " + myBucket);
     }
 }
