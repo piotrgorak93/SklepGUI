@@ -204,9 +204,11 @@ public class ClientGUI {
             System.out.println("Found " + local);
             System.out.println("Wyniki: " + itemsInResultTable);
             removeFromLocalStock(local);
+            cleanResultTable();
             //ArrayList<Item> temp = deleteFromResultTable(local);
             //printSearchResults(temp);
             printBucket();
+
         }
     }
 
@@ -259,6 +261,10 @@ public class ClientGUI {
         }
     }
 
+    public void cleanResultTable() {
+        foundProductTable.setItems(null);
+    }
+
     public void resetItemToStock(Item item) {
         for (Item item1 : itemsOnList) {
             if (item.getId() == item1.getId()) {
@@ -306,7 +312,7 @@ public class ClientGUI {
         ArrayList<Item> foundList = null;
         try {
             foundList = meeting.findItemsByCategory(text);
-            System.out.println(foundList);
+            System.out.println("Znaleziono : " + foundList);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -319,7 +325,7 @@ public class ClientGUI {
         ArrayList<Item> foundList = null;
         try {
             foundList = meeting.findItemsByDescription(text);
-            System.out.println(foundList);
+            System.out.println("Znaleziono : " + foundList);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -332,7 +338,7 @@ public class ClientGUI {
         ArrayList<Item> foundList = null;
         try {
             foundList = meeting.findItemsByName(text);
-            System.out.println(foundList);
+            System.out.println("Znaleziono : " + foundList);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -375,12 +381,7 @@ public class ClientGUI {
     private void addOneToQuantity(Item item, int quantity) {
         for (Item item1 : checked.keySet()) {
             if (item1.getId() == item.getId()) {
-                System.out.println(checked);
-                System.out.println(checked.get(item1));
-                //    checked.replace(item1, returnValueFromMap(item1), quantity);
-
                 checked.put(item1, quantity);
-                System.out.println(checked);
             }
         }
     }
@@ -422,8 +423,6 @@ public class ClientGUI {
             local.add(new Item(localItem.getName(), localItem.getCategory(), localItem.getDescription(),
                     localItem.getPrice(), localItem.getQuantity(), localItem.getId()));
         }
-        //    updateBucket(local);
-        //      local.clear();
     }
 
 
@@ -435,14 +434,6 @@ public class ClientGUI {
         }
         return localItems;
 
-    }
-
-    private void updateBucket(ArrayList<Item> items) {
-        try {
-            meeting.addItems(items, user);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
     public void removeFromBucket() {

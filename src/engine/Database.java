@@ -11,7 +11,7 @@ public class Database {
     ArrayList<Item> itemsToReturn = new ArrayList<>();
 
     public Database() {
-        itemArrayList = new ArrayList<Item>(
+        itemArrayList = new ArrayList<>(
                 Arrays.<Item>asList(
                         new Item("Komputer biurowy", "Komputer", "8GB RAM, Intel i3", 2000, 5, 1),
                         new Item("Komputer do gier", "Komputer", "16GB RAM, Intel i7", 4000, 4, 2),
@@ -45,8 +45,6 @@ public class Database {
         int quantity = item.getQuantity();
         if (quantity == 1) {
             itemArrayList.remove(item);
-            System.out.println("USUWAM Z BAZY");
-            System.out.println("LISTA PRZEDMIOTOW " + itemArrayList);
         } else
             item.setQuantity(--quantity);
 
@@ -58,7 +56,6 @@ public class Database {
             if (item.getName().toLowerCase().contains(name))
                 itemsToReturn.add(item);
         }
-        System.out.println("Zwracam: " + itemsToReturn);
         return itemsToReturn;
     }
 
@@ -66,30 +63,26 @@ public class Database {
     public ArrayList<Item> getItemByCategory(String category) {
 
         itemsToReturn.clear();
-        System.out.println("Lista: " + itemsToReturn);
         if (!category.equalsIgnoreCase(""))
             for (Item item : itemArrayList) {
-                if (item.getCategory().equalsIgnoreCase(category)) {
+                if (item.getCategory().toLowerCase().contains(category)) {
 
                     itemsToReturn.add(itemsToReturn.size(), item);
 
                 }
             }
-        System.out.println("Zwracam: " + itemsToReturn);
         return itemsToReturn;
     }
 
     public ArrayList<Item> getItemByDescription(String description) {
         itemsToReturn.clear();
-        System.out.println("Lista: " + itemsToReturn);
-        if (!description.equalsIgnoreCase(""))
+        if (!description.toLowerCase().contains(description))
             for (Item item : itemArrayList) {
                 if (item.getDescription().toLowerCase().contains(description)) {
                     itemsToReturn.add(item);
                 }
 
             }
-        System.out.println("Zwracam: " + itemsToReturn);
         return itemsToReturn;
     }
 
@@ -109,6 +102,6 @@ public class Database {
                     itemArrayList.remove(item1);
             }
         }
-        System.out.println("Zmniejszy³em liczbe, by³o "+temp+" jest"+itemArrayList );
+        System.out.println("Zmniejszy³em liczbe, by³o " + temp + " jest" + itemArrayList);
     }
 }

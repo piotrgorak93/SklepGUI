@@ -55,7 +55,7 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
 
     @Override
     public void removeFromBucket(User user, Item item) {
-        System.out.println("USUWAM " + item);
+
         findUserOnList(user).removeFromBucket(item);
     }
 
