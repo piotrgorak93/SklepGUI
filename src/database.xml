@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<items>
+    <item id="1">
+        <name>Komputer biurowy</name>
+        <category>Komputer</category>
+        <description>8GB RAM, Intel i3</description>
+        <price>2000</price>
+        <quantity>5</quantity>
+    </item>
+    <item id="2">
+        <name>Komputer do gier</name>
+        <category>Komputer</category>
+        <description>16GB RAM, Intel i7</description>
+        <price>4000</price>
+        <quantity>4</quantity>
+    </item>
+    <item id="3">
+        <name>Komputer multimedialny</name>
+        <category>Komputer</category>
+        <description>4GB RAM, AMD Athlon</description>
+        <price>2100</price>
+        <quantity>6</quantity>
+    </item>
+    <item id="4">
+        <name>Apple iPhone 6</name>
+        <category>Telefon</category>
+        <description>Najnowszy iPhone, robi super zdjecia</description>
+        <price>3500</price>
+        <quantity>10</quantity>
+    </item>
+    <item id="5">
+        <name>Samsung Galaxy S5</name>
+        <category>Telefon</category>
+        <description>4GB RAM, 12Mpix, kup teraz!</description>
+        <price>1700</price>
+        <quantity>8</quantity>
+    </item>
+    <item id="6">
+        <name>Zegarek pozlacany</name>
+        <category>Zegarek</category>
+        <description>Szykowny zegarek firmy ROLEX</description>
+        <price>1500</price>
+        <quantity>5</quantity>
+    </item>
+    <item id="7">
+        <name>Komputer biurowy DELL Inspiron 14 3451</name>
+        <category>Komputer</category>
+        <description>Intel Celeron N2840, 2GB RAM, 500GB HDD, W8.1</description>
+        <price>1099</price>
+        <quantity>2</quantity>
+    </item>
+    <item id="8">
+        <name>Komputer do gier ASUS N551JM</name>
+        <category>Komputer</category>
+        <description>i7, 12 GB RAM, 1TB HDD, GTX 860 W8.1</description>
+        <price>4200</price>
+        <quantity>1</quantity>
+    </item>
+    <item id="9">
+        <name>Komputer do gier Alienware M18x</name>
+        <category>Komputer</category>
+        <description>i7, 32 GB RAM, 2TB HDD, GTX 880 W8.1</description>
+        <price>16999</price>
+        <quantity>1</quantity>
+    </item>
+    <item id="10">
+        <name>Komputer multimedialny HP 15-R233NW</name>
+        <category>Komputer</category>
+        <description>i3, 8 GB RAM, 1TB HDD, GF 820 M, W8.1</description>
+        <price>2399</price>
+        <quantity>3</quantity>
+    </item>
+    <item id="11">
+        <name>Wiedzmin 3 Wild Hunt</name>
+        <category>Gra komputerowa</category>
+        <description>PC GAME PL, PEGI 18</description>
+        <price>130</price>
+        <quantity>10</quantity>
+    </item>
+    <item id="12">
+        <name>Sony Xperia T3</name>
+        <category>Telefon</category>
+        <description>Smartphone, Android 4.4 8Mpix</description>
+        <price>800</price>
+        <quantity>3</quantity>
+    </item>
+    <item id="13">
+        <name>Microsoft Lumia 535</name>
+        <category>Telefon</category>
+        <description>Smartphone, Windows Phone 8.1, 5Mpix</description>
+        <price>450</price>
+        <quantity>2</quantity>
+    </item>
+    <item id="14">
+        <name>Samsung Galaxy S6</name>
+        <category>Telefon</category>
+        <description>Smartphone, Android 5, 16 Mpix</description>
+        <price>2699</price>
+        <quantity>1</quantity>
+    </item>
+    <item id="15">
+        <name>Nakladanie folii na ekran</name>
+        <category>Uslugi</category>
+        <description>Tanio, szybko, profesjonalnie</description>
+        <price>10</price>
+        <quantity>100</quantity>
+    </item>
+</items>
