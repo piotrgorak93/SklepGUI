@@ -330,6 +330,7 @@ public class AdminGUI {
                         itemsToPrint.remove(index);
                         itemsToPrint.add(index, new LocalItem(localItem.getName(), localItem.getCategory(),
                                 localItem.getDescription(), localItem.getPrice(), --temp, localItem.getId()));
+                        dbProductTable.getSelectionModel().selectFirst();
                         break;
 
                     }
