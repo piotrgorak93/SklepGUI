@@ -293,8 +293,8 @@ public class AdminGUI {
 
     public boolean validateFields() {
         return newPrice.getText().matches("\\d+[\\.]\\d\\d")
-                && newQuantity.getText().matches("\\d")
-                && newId.getText().matches("\\d");
+                && newQuantity.getText().matches("\\d+")
+                && newId.getText().matches("\\d+");
     }
 
     public void saveDatabase() {

@@ -1,13 +1,17 @@
 package engine;
 
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -21,17 +25,13 @@ public class Database {
 
     public Database() {
         try {
-
             File fXmlFile = new File("database.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(fXmlFile);
             doc.getDocumentElement().normalize();
-
             NodeList nList = doc.getElementsByTagName("item");
-
             System.out.println("----------------------------");
-
             for (int temp = 0; temp < nList.getLength(); temp++) {
 
                 Node nNode = nList.item(temp);
@@ -106,8 +106,59 @@ public class Database {
     }
 
     public void updateDatabase(ArrayList<Item> database) {
-        System.out.println("Baza danych zostala zaktualizowana");
         this.itemArrayList = database;
+        saveToXML();
+        System.out.println("Baza danych zostala zaktualizowana");
+    }
+
+    public void saveToXML() {
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+            // root elements
+            Document doc = docBuilder.newDocument();
+
+            Element rootElement = doc.createElement("items");
+            doc.appendChild(rootElement);
+            for (Item item : this.itemArrayList) {
+                Element staff = doc.createElement("item");
+                rootElement.appendChild(staff);
+                Attr attr = doc.createAttribute("id");
+                attr.setValue(Integer.toString(item.getId()));
+                staff.setAttributeNode(attr);
+
+                Element name = doc.createElement("name");
+                name.appendChild(doc.createTextNode(item.getName()));
+                staff.appendChild(name);
+                Element category = doc.createElement("category");
+                category.appendChild(doc.createTextNode(item.getCategory()));
+                staff.appendChild(category);
+                Element description = doc.createElement("description");
+                description.appendChild(doc.createTextNode(item.getDescription()));
+                staff.appendChild(description);
+                Element price = doc.createElement("price");
+                price.appendChild(doc.createTextNode(Double.toString(item.getPrice())));
+                staff.appendChild(price);
+                Element quantity = doc.createElement("quantity");
+                quantity.appendChild(doc.createTextNode(Integer.toString(item.getQuantity())));
+                staff.appendChild(quantity);
+            }
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("database.xml"));
+
+            transformer.transform(source, result);
+
+            System.out.println("File saved!");
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
+
     }
 
     public void decreaseQuantity(Item item) {
