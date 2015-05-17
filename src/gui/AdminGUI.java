@@ -297,14 +297,6 @@ public class AdminGUI {
                 && newId.getText().matches("\\d");
     }
 
-    public void removeFromDatabase(Item item) {
-        try {
-            meeting.removeItem(item);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void saveDatabase() {
         ArrayList<Item> listToSave = new ArrayList<>();
         ObservableList<LocalItem> localItemsToSave;

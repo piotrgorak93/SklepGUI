@@ -16,6 +16,8 @@ public interface IMeeting extends Remote {
 
     void removeItem(Item item) throws RemoteException;
 
+    void decreaseQuantity(Item item) throws RemoteException;
+
     void addItems(ArrayList<Item> items, User user) throws RemoteException;
 
     ArrayList<Item> getAllItems() throws RemoteException;

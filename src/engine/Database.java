@@ -94,6 +94,21 @@ public class Database {
     }
 
     public void updateDatabase(ArrayList<Item> database) {
+        System.out.println("Baza danych zostala zaktualizowana");
         this.itemArrayList = database;
+    }
+
+    public void decreaseQuantity(Item item) {
+        int temp = 0;
+        for (Item item1 : itemArrayList) {
+            if (item1.getId() == item.getId()) {
+                temp = item1.getQuantity();
+                if (temp > 1)
+                    item1.setQuantity(--temp);
+                else
+                    itemArrayList.remove(item1);
+            }
+        }
+        System.out.println("Zmniejszy³em liczbe, by³o "+temp+" jest"+itemArrayList );
     }
 }

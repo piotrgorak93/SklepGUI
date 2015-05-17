@@ -85,8 +85,13 @@ public class MeetingImpl extends UnicastRemoteObject implements IMeeting {
 
     @Override
     public void removeItem(Item item) throws RemoteException {
-        database.removeItemFromDatabase(item);
+        decreaseQuantity(item);
 
+    }
+
+    @Override
+    public void decreaseQuantity(Item item) {
+        database.decreaseQuantity(item);
     }
 
     @Override

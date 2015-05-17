@@ -15,7 +15,7 @@ public class CompleteEvent {
         alert.setHeaderText(null);
         double wynik = 0;
         for (Item item : userBucket) {
-            wynik += item.getPrice() * item.getQuantity();
+            wynik += item.getPrice();
         }
 
         if (!userBucket.isEmpty())

@@ -4,7 +4,6 @@ import engine.Item;
 import gui.events.AddToBucketEvent;
 import gui.events.CompleteEvent;
 import gui.events.NothingFound;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -193,18 +192,42 @@ public class ClientGUI {
     }
 
     public void searchAddItemToBucket() {
-        Item local = new Item(selectedItemFound.getName(), selectedItemFound.getCategory(),
-                selectedItemFound.getDescription(), selectedItemFound.getPrice(), selectedItemFound.getQuantity(), selectedItemFound.getQuantity());
-        try {
-            meeting.addToBucket(user, local);
-        } catch (RemoteException e) {
-            e.printStackTrace();
+        if (selectedItemFound != null) {
+            System.out.println(selectedItemFound);
+            Item local = new Item(selectedItemFound.getName(), selectedItemFound.getCategory(),
+                    selectedItemFound.getDescription(), selectedItemFound.getPrice(), selectedItemFound.getQuantity(), selectedItemFound.getQuantity());
+            try {
+                meeting.addToBucket(user, local);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            System.out.println("Found " + local);
+            System.out.println("Wyniki: " + itemsInResultTable);
+            removeFromLocalStock(local);
+            //ArrayList<Item> temp = deleteFromResultTable(local);
+            //printSearchResults(temp);
+            printBucket();
         }
-        System.out.println("Found " + local);
-        System.out.println("Wyniki: " + itemsInResultTable);
-        removeFromLocalStock(local);
-        itemsInResultTable.remove(local);
-        printBucket();
+    }
+
+    private ArrayList<Item> deleteFromResultTable(Item local) {
+        ArrayList<Item> toReturn = new ArrayList<>();
+        for (LocalItem localItem : itemsInResultTable) {
+            toReturn.add(new Item(localItem.getName(), localItem.getCategory(),
+                    localItem.getDescription(), localItem.getPrice(), localItem.getQuantity(), localItem.getId()));
+
+        }
+        for (Item item : toReturn) {
+            if (item.getId() == local.getId()) {
+                if (item.getQuantity() == 1)
+                    toReturn.remove(item);
+                else {
+                    int temp = item.getQuantity();
+                    item.setQuantity(--temp);
+                }
+            }
+        }
+        return toReturn;
     }
 
     public void removeFromLocalStock(Item item) {
@@ -218,6 +241,22 @@ public class ClientGUI {
             item.setQuantity(--quantity);
         new AddToBucketEvent(item);
         updateList();
+    }
+
+    public void removeFromSearch() {
+        if (selectedItemFound != null) {
+            Item toDelete = new Item(selectedItemFound.getName(), selectedItemFound.getCategory(),
+                    selectedItemFound.getDescription(), selectedItemFound.getPrice(),
+                    selectedItemFound.getQuantity(), selectedItemFound.getId());
+            try {
+                meeting.removeFromBucket(user, toDelete);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+            printBucket();
+            resetItemToStock(toDelete);
+            printListOfItems();
+        }
     }
 
     public void resetItemToStock(Item item) {
@@ -359,23 +398,17 @@ public class ClientGUI {
             itemsInBucketTable.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(), item.getPrice(),
                     1, item.getId()));
         }
-        System.out.println("Wypisuje koszyk " + itemsInBucketTable);
         for (Item item : local) {
             if (!checkIfMapContainsKey(item)) {
                 checked.put(item, 1);
-                System.out.println("DODAJE");
-                System.out.println("Po dodaniu " + checked);
             } else {
                 System.out.println(item);
                 int temp = returnValueFromMap(item);
-                System.out.println("zamieniam");
-                System.out.println("ilosc to " + temp);
                 addOneToQuantity(item, ++temp);
             }
         }
 
         ObservableList<LocalItem> list = createTable();
-        System.out.println("LISTA" + list);
         bucketProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
         bucketProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
         bucketProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
@@ -388,18 +421,17 @@ public class ClientGUI {
         for (LocalItem localItem : list) {
             local.add(new Item(localItem.getName(), localItem.getCategory(), localItem.getDescription(),
                     localItem.getPrice(), localItem.getQuantity(), localItem.getId()));
-
         }
-
-        updateBucket(local);
+        //    updateBucket(local);
+        //      local.clear();
     }
+
 
     public ObservableList<LocalItem> createTable() {
         ObservableList<LocalItem> localItems = FXCollections.observableArrayList();
         for (Item item : checked.keySet()) {
             localItems.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(),
                     item.getPrice(), returnValueFromMap(item), item.getId()));
-            System.out.println("WYPISUJE " + localItems);
         }
         return localItems;
 
@@ -431,17 +463,20 @@ public class ClientGUI {
 
     public void buyItemsFromBucket() {
         ArrayList<Item> userBucket = null;
+        ArrayList<Item> newDBContent = new ArrayList<>();
         try {
             userBucket = meeting.getUserBucket(user);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-        for (Item item : userBucket) {
-            try {
-                meeting.removeItem(item);
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+        for (Item item : itemsOnList) {
+            newDBContent.add(new Item(item.getName(), item.getCategory(), item.getDescription(),
+                    item.getPrice(), item.getQuantity(), item.getId()));
+        }
+        try {
+            meeting.updateDatabase(newDBContent);
+        } catch (RemoteException e) {
+            e.printStackTrace();
         }
         new CompleteEvent(userBucket);
         cleanTable();
