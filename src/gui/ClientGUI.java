@@ -11,11 +11,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import org.omg.CORBA.INTERNAL;
 import rmi.rmiTestClient.MeetingClient;
 import rmi.rmiTestMeeting.IMeeting;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Piotr Górak, Maciej Knicha³ dnia 2015-05-09.
@@ -57,7 +59,7 @@ public class ClientGUI {
     public Button removeItem;
     public TabPane tab;
 
-    ArrayList<Item> checked = new ArrayList<>();
+    HashMap<Item, Integer> checked = new HashMap<>();
     User user;
     IMeeting meeting;
     Item selectedItem;
@@ -308,6 +310,35 @@ public class ClientGUI {
         foundProductTable.setItems(itemsInResultTable);
     }
 
+    private boolean checkIfMapContainsKey(Item key) {
+        for (Item item : checked.keySet()) {
+            if (item.getId() == key.getId())
+                return true;
+        }
+        return false;
+    }
+
+    private int returnValueFromMap(Item item) {
+        for (Item item1 : checked.keySet()) {
+            if (item1.getId() == item.getId())
+                return checked.get(item1);
+        }
+        return 0;
+    }
+
+    private void addOneToQuantity(Item item, int quantity) {
+        for (Item item1 : checked.keySet()) {
+            if (item1.getId() == item.getId()) {
+                System.out.println(checked);
+                System.out.println(checked.get(item1));
+                //    checked.replace(item1, returnValueFromMap(item1), quantity);
+
+                checked.put(item1, quantity);
+                System.out.println(checked);
+            }
+        }
+    }
+
     private void printBucket() {
         itemsInBucketTable = FXCollections.observableArrayList();
         ArrayList<Item> local = new ArrayList<>();
@@ -322,30 +353,41 @@ public class ClientGUI {
                     1, item.getId()));
         }
         System.out.println("Wypisuje koszyk " + itemsInBucketTable);
-        for (int i = 0; i < itemsInBucketTable.size() - 1; i++) {
-            for (int j = i + 1; j < itemsInBucketTable.size(); j++) {
-                if (!isChecked(itemsInBucketTable.get(i))) {
-                    checked.add(itemsInBucketTable.get(i));
-                    if (itemsInBucketTable.get(i).getId() == itemsInBucketTable.get(j).getId())
-                        increaseQuantity(itemsInBucketTable.get(i));
-                }
+        for (Item item : local) {
+            if (!checkIfMapContainsKey(item)) {
+                checked.put(item, 1);
+                System.out.println("DODAJE");
+                System.out.println("Po dodaniu " + checked);
+            } else {
+                System.out.println(item);
+                int temp = returnValueFromMap(item);
+                System.out.println("zamieniam");
+                System.out.println("ilosc to " + temp);
+                addOneToQuantity(item, ++temp);
             }
         }
-        for (int i = 0; i < itemsInBucketTable.size() - 1; i++) {
-            for (int j = i + 1; j < itemsInBucketTable.size(); j++) {
-                if (isTheSameItem(itemsInBucketTable.get(i), itemsInBucketTable.get(j))) {
-                    deleteItem(itemsInBucketTable.get(j));
-                }
-            }
-        }
-        checked.clear();
+
+        ObservableList<LocalItem> list = createTable();
+        System.out.println("LISTA" + list);
         bucketProductID.setCellValueFactory(cellData -> cellData.getValue().idProperty);
         bucketProductName.setCellValueFactory(cellData -> cellData.getValue().nameProperty);
         bucketProductCategory.setCellValueFactory(cellData -> cellData.getValue().categoryProperty);
         bucketProductDescription.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty);
         bucketProductPrice.setCellValueFactory(cellData -> cellData.getValue().priceProperty);
         bucketProductQuantity.setCellValueFactory(cellData -> cellData.getValue().quantityProperty);
-        bucketProductTable.setItems(itemsInBucketTable);
+        bucketProductTable.setItems(list);
+        checked.clear();
+    }
+
+    public ObservableList<LocalItem> createTable() {
+        ObservableList<LocalItem> localItems = FXCollections.observableArrayList();
+        for (Item item : checked.keySet()) {
+            localItems.add(new LocalItem(item.getName(), item.getCategory(), item.getDescription(),
+                    item.getPrice(), returnValueFromMap(item), item.getId()));
+            System.out.println("WYPISUJE "+localItems);
+        }
+        return localItems;
+
     }
 
     public void removeFromBucket() {
@@ -383,13 +425,6 @@ public class ClientGUI {
 
     }
 
-    public boolean isChecked(Item item) {
-        for (Item item1 : checked) {
-            if (item1.getId() == item.getId())
-                return true;
-        }
-        return false;
-    }
 
     public void increaseQuantity(LocalItem item) {
         System.out.println("Ilosc przedmiotow przed " + item + " : " + item.getQuantity());
